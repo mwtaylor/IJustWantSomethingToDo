@@ -1,6 +1,14 @@
 package app.elephantintheroom.somethingtodo.data
 
-data class ThingToDo(val name: String)
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "thing_to_do")
+data class ThingToDo(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val name: String,
+)
 
 val thingsToDo = listOf(
     ThingToDo(name = "Work"),

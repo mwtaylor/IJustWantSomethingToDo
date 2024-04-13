@@ -3,6 +3,7 @@ package app.elephantintheroom.somethingtodo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,14 +17,21 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.CreationExtras
 import app.elephantintheroom.somethingtodo.data.ThingToDo
 import app.elephantintheroom.somethingtodo.data.thingsToDo
+import app.elephantintheroom.somethingtodo.ui.ThingsToDoViewModel
+import app.elephantintheroom.somethingtodo.ui.ThingsToDoViewModelProvider
 import app.elephantintheroom.somethingtodo.ui.theme.IJustWantSomethingToDoTheme
 
 class MainActivity : ComponentActivity() {
+    private val viewModel: ThingsToDoViewModel by viewModels { ThingsToDoViewModelProvider.Factory }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -33,7 +41,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    IJustWantSomethingToDoApp()
+                    IJustWantSomethingToDoApp(viewModel)
                 }
             }
         }
@@ -41,12 +49,21 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun IJustWantSomethingToDoApp() {
+fun IJustWantSomethingToDoApp(
+    viewModel: ThingsToDoViewModel,
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
     Scaffold { contentPadding ->
-        LazyColumn(contentPadding = contentPadding) {
-            items(thingsToDo) {
-                ThingToDoItem(it)
-            }
+        ThingsToDoList(uiState.thingsToDo, Modifier.padding(contentPadding))
+    }
+}
+
+@Composable
+private fun ThingsToDoList(thingsToDo: List<ThingToDo> = listOf(), modifier: Modifier = Modifier) {
+    LazyColumn(modifier = modifier) {
+        items(thingsToDo) {
+            ThingToDoItem(it)
         }
     }
 }
@@ -68,6 +85,8 @@ private fun ThingToDoItem(thingToDo: ThingToDo) {
 @Composable
 fun IJustWantSomethingToDoAppPreview() {
     IJustWantSomethingToDoTheme {
-        IJustWantSomethingToDoApp()
+        ThingsToDoList(
+            thingsToDo
+        )
     }
 }
