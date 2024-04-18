@@ -6,7 +6,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import app.elephantintheroom.somethingtodo.SomethingToDoApplication
 
-object ThingsToDoViewModelProvider {
+object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             ThingsToDoViewModel(wantSomethingToDoApplication().container.thingToDoRepository)

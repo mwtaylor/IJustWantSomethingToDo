@@ -10,8 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Card
-import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -21,16 +25,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.CreationExtras
 import app.elephantintheroom.somethingtodo.data.ThingToDo
+import app.elephantintheroom.somethingtodo.data.TimeSpent
 import app.elephantintheroom.somethingtodo.data.thingsToDo
 import app.elephantintheroom.somethingtodo.ui.ThingsToDoViewModel
-import app.elephantintheroom.somethingtodo.ui.ThingsToDoViewModelProvider
+import app.elephantintheroom.somethingtodo.ui.AppViewModelProvider
 import app.elephantintheroom.somethingtodo.ui.theme.IJustWantSomethingToDoTheme
 
 class MainActivity : ComponentActivity() {
-    private val viewModel: ThingsToDoViewModel by viewModels { ThingsToDoViewModelProvider.Factory }
+    private val viewModel: ThingsToDoViewModel by viewModels { AppViewModelProvider.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,21 +60,41 @@ fun IJustWantSomethingToDoApp(
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold { contentPadding ->
-        ThingsToDoList(uiState.thingsToDo, Modifier.padding(contentPadding))
+        ThingsToDoList(
+            uiState.thingsToDo,
+            Modifier.padding(contentPadding),
+            startSpendingTime = viewModel::startSpendingTime,
+            stopSpendingTime = viewModel::stopSpendingTime
+        )
     }
 }
 
 @Composable
-private fun ThingsToDoList(thingsToDo: List<ThingToDo> = listOf(), modifier: Modifier = Modifier) {
+private fun ThingsToDoList(
+    thingsToDo: Map<ThingToDo, TimeSpent?>,
+    modifier: Modifier = Modifier,
+    startSpendingTime: (ThingToDo) -> Unit,
+    stopSpendingTime: (ThingToDo, TimeSpent) -> Unit,
+) {
     LazyColumn(modifier = modifier) {
-        items(thingsToDo) {
-            ThingToDoItem(it)
+        items(thingsToDo.toList()) {
+            ThingToDoItem(
+                it.first,
+                it.second,
+                { startSpendingTime(it.first) },
+                { timeSpent: TimeSpent -> stopSpendingTime(it.first, timeSpent) },
+            )
         }
     }
 }
 
 @Composable
-private fun ThingToDoItem(thingToDo: ThingToDo) {
+private fun ThingToDoItem(
+    thingToDo: ThingToDo,
+    activeTimeSpent: TimeSpent?,
+    startSpendingTime: () -> Unit,
+    stopSpendingTime: (TimeSpent) -> Unit,
+) {
     Card(modifier = Modifier.padding(dimensionResource(R.dimen.padding))) {
         Row(
             modifier = Modifier
@@ -77,6 +102,21 @@ private fun ThingToDoItem(thingToDo: ThingToDo) {
                 .padding(dimensionResource(R.dimen.padding))
         ) {
             Text(text = thingToDo.name)
+            if (activeTimeSpent == null) {
+                IconButton(onClick = startSpendingTime) {
+                    Icon(
+                        imageVector = Icons.Filled.PlayArrow,
+                        contentDescription = stringResource(R.string.start_spending_time_icon_description, thingToDo.name)
+                    )
+                }
+            } else {
+                IconButton(onClick = { stopSpendingTime(activeTimeSpent) }) {
+                    Icon(
+                        imageVector = Icons.Filled.Stop,
+                        contentDescription = stringResource(R.string.stop_spending_time_icon_description, thingToDo.name)
+                    )
+                }
+            }
         }
     }
 }
@@ -86,7 +126,9 @@ private fun ThingToDoItem(thingToDo: ThingToDo) {
 fun IJustWantSomethingToDoAppPreview() {
     IJustWantSomethingToDoTheme {
         ThingsToDoList(
-            thingsToDo
+            thingsToDo,
+            startSpendingTime = {},
+            stopSpendingTime = { _, _ -> },
         )
     }
 }

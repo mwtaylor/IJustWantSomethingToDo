@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "app.elephantintheroom.somethingtodo"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -83,4 +83,5 @@ dependencies {
     testImplementation("androidx.arch.core:core-testing:${rootProject.extra["arch_version"]}")
     testImplementation("androidx.lifecycle:lifecycle-runtime-testing:${rootProject.extra["lifecycle_version"]}")
     implementation("androidx.activity:activity-ktx:1.8.2")
+    implementation("androidx.compose.material:material-icons-extended")
 }
