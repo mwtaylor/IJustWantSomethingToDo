@@ -12,7 +12,7 @@ data class ThingToDo(
 )
 
 val thingsToDo = mapOf(
-    Pair(ThingToDo(name = "Work"), TimeSpent(thingToDoId = 0, started = Instant.now())),
+    Pair(ThingToDo(name = "Work"), TimeSpent(thingToDoId = 0, started = Instant.now().minusMillis(10000))),
     Pair(ThingToDo(name = "Play"), null),
     Pair(ThingToDo(name = "Clean"), null),
     Pair(ThingToDo(name = "Rest"), null),
