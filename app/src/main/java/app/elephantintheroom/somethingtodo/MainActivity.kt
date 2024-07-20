@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,9 +16,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -40,13 +46,13 @@ import app.elephantintheroom.somethingtodo.data.TimeSpent
 import app.elephantintheroom.somethingtodo.data.thingsToDo
 import app.elephantintheroom.somethingtodo.ui.ThingsToDoViewModel
 import app.elephantintheroom.somethingtodo.ui.AppViewModelProvider
+import app.elephantintheroom.somethingtodo.ui.ThingToDoWithTimeSpent
 import app.elephantintheroom.somethingtodo.ui.theme.IJustWantSomethingToDoTheme
 import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
 class MainActivity : ComponentActivity() {
     private val viewModel: ThingsToDoViewModel by viewModels { AppViewModelProvider.Factory }
@@ -86,7 +92,7 @@ fun IJustWantSomethingToDoApp(
 
 @Composable
 private fun AppContent(
-    thingsToDo: Map<ThingToDo, TimeSpent?>,
+    thingsToDo: List<ThingToDoWithTimeSpent>,
     modifier: Modifier = Modifier,
     activeTimeSpent: Pair<ThingToDo, TimeSpent>? = null,
     startSpendingTime: (ThingToDo) -> Unit,
@@ -97,7 +103,7 @@ private fun AppContent(
             Row(
                 modifier = Modifier.padding(
                     vertical = dimensionResource(R.dimen.padding),
-                    horizontal = dimensionResource(R.dimen.doublePadding)
+                    horizontal = dimensionResource(R.dimen.double_padding)
                 ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -106,28 +112,7 @@ private fun AppContent(
                 }
                 Text(text = activeTimeSpent.first.name)
                 Spacer(modifier = Modifier.weight(1.0F))
-                var timerHours by remember { mutableIntStateOf(0) }
-                var timerMinutes by remember { mutableIntStateOf(0) }
-                var timerSeconds by remember { mutableIntStateOf(0) }
-                LaunchedEffect(activeTimeSpent) {
-                    while(true) {
-                        delay(200.milliseconds)
-                        val timeSpentSoFar =
-                            Duration.between(activeTimeSpent.second.started, Instant.now())
-                                .truncatedTo(ChronoUnit.SECONDS)
-                        timerHours = timeSpentSoFar.toHoursPart()
-                        timerMinutes = timeSpentSoFar.toMinutesPart()
-                        timerSeconds = timeSpentSoFar.toSecondsPart()
-                    }
-                }
-                Text(
-                    text = stringResource(
-                        R.string.formatted_duration,
-                        timerHours,
-                        timerMinutes,
-                        timerSeconds,
-                    )
-                )
+                UpdatingDuration { Duration.between(activeTimeSpent.second.started, Instant.now()) }
             }
         }
         ThingsToDoList(
@@ -140,7 +125,7 @@ private fun AppContent(
 
 @Composable
 private fun ThingsToDoList(
-    thingsToDo: Map<ThingToDo, TimeSpent?>,
+    thingsToDo: List<ThingToDoWithTimeSpent>,
     modifier: Modifier = Modifier,
     startSpendingTime: (ThingToDo) -> Unit,
     stopSpendingTime: (ThingToDo, TimeSpent) -> Unit,
@@ -148,10 +133,11 @@ private fun ThingsToDoList(
     LazyColumn(modifier = modifier) {
         items(thingsToDo.toList()) {
             ThingToDoItem(
-                it.first,
-                it.second,
-                { startSpendingTime(it.first) },
-                { timeSpent: TimeSpent -> stopSpendingTime(it.first, timeSpent) },
+                it.thingToDo,
+                it.activeTimeSpent,
+                it.recentTimeSpent.getOrDefault(ChronoUnit.DAYS to 0, Duration.ZERO),
+                { startSpendingTime(it.thingToDo) },
+                { timeSpent: TimeSpent -> stopSpendingTime(it.thingToDo, timeSpent) },
             )
         }
     }
@@ -161,22 +147,89 @@ private fun ThingsToDoList(
 private fun ThingToDoItem(
     thingToDo: ThingToDo,
     activeTimeSpent: TimeSpent?,
+    totalTimeSpentToday: Duration,
     startSpendingTime: () -> Unit,
     stopSpendingTime: (TimeSpent) -> Unit,
+    startExpanded: Boolean = false,
 ) {
-    Card(modifier = Modifier.padding(dimensionResource(R.dimen.padding))) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(dimensionResource(R.dimen.padding)),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            if (activeTimeSpent == null) {
-                StartSpendingTimeButton(thingToDo, startSpendingTime)
+    var expanded by remember { mutableStateOf(startExpanded) }
+    val color by animateColorAsState(
+        targetValue = if (activeTimeSpent != null) {
+            MaterialTheme.colorScheme.primaryContainer
+        } else {
+            MaterialTheme.colorScheme.secondaryContainer
+        },
+        label = "Animate Thing To Do Card Color"
+    )
+    Card(
+        modifier = Modifier
+            .padding(dimensionResource(R.dimen.padding))
+            .background(color),
+        colors = CardDefaults.cardColors(
+            containerColor = color,
+            contentColor = if (activeTimeSpent != null) {
+                MaterialTheme.colorScheme.onPrimaryContainer
             } else {
-                StopSpendingTimeButton(thingToDo) { stopSpendingTime(activeTimeSpent) }
+               MaterialTheme.colorScheme.onSecondaryContainer
+           },
+        )
+    ) {
+        Column(
+            modifier = Modifier.animateContentSize(),
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(R.dimen.padding)),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (activeTimeSpent == null) {
+                    StartSpendingTimeButton(thingToDo, startSpendingTime)
+                } else {
+                    StopSpendingTimeButton(thingToDo) { stopSpendingTime(activeTimeSpent) }
+                }
+                Text(text = thingToDo.name)
+                Spacer(Modifier.weight(1.0F))
+                IconButton(onClick = { expanded = !expanded }) {
+                    if (expanded) {
+                        Icon(
+                            imageVector = Icons.Filled.ExpandLess,
+                            contentDescription =
+                                stringResource(R.string.collapse_thing_to_do, thingToDo.name)
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Filled.ExpandMore,
+                            contentDescription =
+                                stringResource(R.string.expand_thing_to_do, thingToDo.name)
+                        )
+                    }
+                }
             }
-            Text(text = thingToDo.name)
+            if (expanded) {
+                // How to recompose when going to next day but otherwise view model doesn't change?
+                val startOfDay = Instant.now().truncatedTo(ChronoUnit.DAYS)
+                val totalTimeSpentTodayIncludingActive = {
+                    totalTimeSpentToday +
+                            if (activeTimeSpent != null) {
+                                val started = if (activeTimeSpent.started < startOfDay) {
+                                    startOfDay
+                                } else {
+                                    activeTimeSpent.started
+                                }
+                                Duration.between(activeTimeSpent.started, Instant.now())
+                            } else {
+                                Duration.ZERO
+                            }
+                }
+                Row(
+                    modifier = Modifier.padding(dimensionResource(R.dimen.padding))
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    UpdatingDuration(totalTimeSpentTodayIncludingActive)
+                }
+            }
         }
     }
 }
@@ -207,17 +260,29 @@ fun StopSpendingTimeButton(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun IJustWantSomethingToDoAppPreview() {
-    IJustWantSomethingToDoTheme {
-        AppContent(
-            thingsToDo,
-            startSpendingTime = {},
-            stopSpendingTime = { _, _ -> },
-            activeTimeSpent = thingsToDo.entries.firstOrNull { it.value != null }?.toPair()?.let {
-                Pair(it.first, it.second!!)
-            }
-        )
+fun UpdatingDuration(
+    getCurrentDuration: () -> Duration
+) {
+    val initialDuration = getCurrentDuration()
+    var timerHours by remember { mutableIntStateOf(initialDuration.toHoursPart()) }
+    var timerMinutes by remember { mutableIntStateOf(initialDuration.toMinutesPart()) }
+    var timerSeconds by remember { mutableIntStateOf(initialDuration.toSecondsPart()) }
+    LaunchedEffect(initialDuration) {
+        while(true) {
+            delay(200.milliseconds)
+            val duration = getCurrentDuration()
+            timerHours = duration.toHoursPart()
+            timerMinutes = duration.toMinutesPart()
+            timerSeconds = duration.toSecondsPart()
+        }
     }
+    Text(
+        text = stringResource(
+            R.string.formatted_duration,
+            timerHours,
+            timerMinutes,
+            timerSeconds,
+        )
+    )
 }

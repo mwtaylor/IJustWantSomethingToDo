@@ -3,4 +3,6 @@
     <string name="start_spending_time_icon_description">Start spending time on %1$s</string>
     <string name="stop_spending_time_icon_description">Stop spending time on %1$s</string>
     <string name="formatted_duration">%1$02d:%2$02d:%3$02d</string>
+    <string name="expand_thing_to_do">"Expand to see more details about %1$s"</string>
+    <string name="collapse_thing_to_do">"Hide details about %1$s"</string>
 </resources>

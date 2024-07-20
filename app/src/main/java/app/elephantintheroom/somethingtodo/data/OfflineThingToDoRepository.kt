@@ -2,6 +2,7 @@ package app.elephantintheroom.somethingtodo.data
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.Instant
 
 class OfflineThingToDoRepository(
     private val thingToDoDao: ThingToDoDao,
@@ -14,6 +15,9 @@ class OfflineThingToDoRepository(
 
     override fun getActiveThingToDoStream(thingToDo: ThingToDo): Flow<TimeSpent?> =
         thingToDoDao.getActiveThingToDo(thingToDo.id)
+
+    override fun getRecentTimeSpentOnThingToDo(thingToDo: ThingToDo, timeSpentSince: Instant): Flow<List<TimeSpent>> =
+        timeSpentDao.getRecentTimeSpentOnThingToDo(thingToDo.id, timeSpentSince.epochSecond)
 
     override suspend fun insertThingToDo(thingToDo: ThingToDo) = thingToDoDao.insert(thingToDo)
 

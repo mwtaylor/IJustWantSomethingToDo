@@ -8,6 +8,13 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TimeSpentDao {
+    @Query(
+        "SELECT * FROM TimeSpent " +
+                "WHERE thingToDoId = :thingToDoId " +
+                "AND finished > :timeSpentSince"
+    )
+    fun getRecentTimeSpentOnThingToDo(thingToDoId: Int, timeSpentSince: Long): Flow<List<TimeSpent>>
+
     @Insert
     suspend fun insert(timeSpent: TimeSpent)
 
