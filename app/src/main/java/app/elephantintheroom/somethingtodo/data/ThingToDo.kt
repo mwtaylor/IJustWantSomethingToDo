@@ -11,9 +11,8 @@ data class ThingToDo(
     val name: String,
 )
 
-val thingsToDo = mapOf(
-    Pair(ThingToDo(name = "Work"), TimeSpent(thingToDoId = 0, started = Instant.now().minusMillis(10000))),
-    Pair(ThingToDo(name = "Play"), null),
-    Pair(ThingToDo(name = "Clean"), null),
-    Pair(ThingToDo(name = "Rest"), null),
+val previewThingsToDo = listOf(
+    ThingToDo(id = 1, name = "Work"),
+    ThingToDo(id = 2, name = "Play"),
+    ThingToDo(id = 3, name = "Clean"),
 )

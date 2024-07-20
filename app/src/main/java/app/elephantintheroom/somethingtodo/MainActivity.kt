@@ -43,7 +43,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import app.elephantintheroom.somethingtodo.data.ThingToDo
 import app.elephantintheroom.somethingtodo.data.TimeSpent
-import app.elephantintheroom.somethingtodo.data.thingsToDo
+import app.elephantintheroom.somethingtodo.data.previewThingsToDo
+import app.elephantintheroom.somethingtodo.data.previewTimeSpent
 import app.elephantintheroom.somethingtodo.ui.ThingsToDoViewModel
 import app.elephantintheroom.somethingtodo.ui.AppViewModelProvider
 import app.elephantintheroom.somethingtodo.ui.ThingToDoWithTimeSpent
@@ -285,4 +286,41 @@ fun UpdatingDuration(
             timerSeconds,
         )
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun IJustWantSomethingToDoAppPreview() {
+    val thingsToDoWithTimeSpent = previewThingsToDo.map { thingToDo ->
+        ThingToDoWithTimeSpent(
+            thingToDo,
+            previewTimeSpent.singleOrNull { it.thingToDoId == thingToDo.id && it.finished == null }
+        )
+    }
+    val activeThingToDo = thingsToDoWithTimeSpent.firstOrNull { it.activeTimeSpent != null }
+    IJustWantSomethingToDoTheme {
+        AppContent(
+            thingsToDo = thingsToDoWithTimeSpent,
+            activeTimeSpent = activeThingToDo?.let { it.thingToDo to it.activeTimeSpent!! },
+            startSpendingTime = {},
+            stopSpendingTime = { _, _ -> },
+        )
+    }
+}
+
+@Preview
+@Composable
+fun ExpandedThingToDoPreview() {
+    val thingToDo = previewThingsToDo.single { it.name == "Work" }
+    val activeTimeSpent = previewTimeSpent.single { it.thingToDoId == thingToDo.id && it.finished == null }
+    IJustWantSomethingToDoTheme {
+        ThingToDoItem(
+            thingToDo = thingToDo,
+            activeTimeSpent = activeTimeSpent,
+            totalTimeSpentToday = Duration.ofMinutes(3),
+            startSpendingTime = {},
+            stopSpendingTime = {},
+            startExpanded = true,
+        )
+    }
 }

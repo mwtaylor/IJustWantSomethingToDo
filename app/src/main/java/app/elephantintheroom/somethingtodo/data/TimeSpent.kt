@@ -21,3 +21,7 @@ data class TimeSpent(
     val started: Instant,
     val finished: Instant? = null,
 )
+
+val previewTimeSpent= listOf(
+    TimeSpent(thingToDoId = previewThingsToDo.single { it.name == "Work" }.id, started = Instant.now().minusSeconds(10))
+)
