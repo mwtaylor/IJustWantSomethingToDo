@@ -61,6 +61,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
+    implementation(libs.androidx.navigation.compose)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
     ksp("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
     implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
     testImplementation(libs.junit)

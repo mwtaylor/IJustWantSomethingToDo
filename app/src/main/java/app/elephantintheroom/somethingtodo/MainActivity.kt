@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.annotation.StringRes
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -15,13 +16,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +46,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import app.elephantintheroom.somethingtodo.data.ThingToDo
 import app.elephantintheroom.somethingtodo.data.TimeSpent
 import app.elephantintheroom.somethingtodo.data.previewThingsToDo
@@ -50,10 +59,16 @@ import app.elephantintheroom.somethingtodo.ui.AppViewModelProvider
 import app.elephantintheroom.somethingtodo.ui.ThingToDoWithTimeSpent
 import app.elephantintheroom.somethingtodo.ui.theme.IJustWantSomethingToDoTheme
 import kotlinx.coroutines.delay
+import kotlinx.serialization.Serializable
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.time.Duration.Companion.milliseconds
+
+enum class AppScreen(@StringRes val title: Int) {
+    Start(title = R.string.app_name),
+    AddThingToDo(title = R.string.add_thing_to_do_route)
+}
 
 class MainActivity : ComponentActivity() {
     private val viewModel: ThingsToDoViewModel by viewModels { AppViewModelProvider.Factory }
@@ -77,17 +92,45 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun IJustWantSomethingToDoApp(
     viewModel: ThingsToDoViewModel,
+    navController: NavHostController = rememberNavController(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    Scaffold { contentPadding ->
-        AppContent(
-            uiState.thingsToDo,
-            Modifier.padding(contentPadding),
-            activeTimeSpent = uiState.activeThingToDo,
-            startSpendingTime = viewModel::startSpendingTime,
-            stopSpendingTime = viewModel::stopSpendingTime,
-        )
+    Scaffold(
+        floatingActionButton = {
+            FloatingAddButton(
+                onAddNewThingToDo = { navController.navigate(AppScreen.AddThingToDo.name) }
+            )
+        }
+    ) { contentPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = AppScreen.Start.name,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
+        ) {
+            composable(route = AppScreen.Start.name) {
+                AppContent(
+                    uiState.thingsToDo,
+                    activeTimeSpent = uiState.activeThingToDo,
+                    startSpendingTime = viewModel::startSpendingTime,
+                    stopSpendingTime = viewModel::stopSpendingTime,
+                )
+            }
+            composable(route = AppScreen.AddThingToDo.name) {
+                AddThingToDo()
+            }
+        }
+    }
+}
+
+@Composable
+fun FloatingAddButton(
+    onAddNewThingToDo: () -> Unit
+) {
+    FloatingActionButton(onClick = { onAddNewThingToDo.invoke() }) {
+        Icon(Icons.Default.Add, contentDescription = "Add")
     }
 }
 
@@ -116,11 +159,15 @@ private fun AppContent(
                 UpdatingDuration { Duration.between(activeTimeSpent.second.started, Instant.now()) }
             }
         }
-        ThingsToDoList(
-            thingsToDo,
-            startSpendingTime = startSpendingTime,
-            stopSpendingTime = stopSpendingTime
-        )
+        if (thingsToDo.isEmpty()) {
+            Text(text = "Nothing available to do right now")
+        } else {
+            ThingsToDoList(
+                thingsToDo,
+                startSpendingTime = startSpendingTime,
+                stopSpendingTime = stopSpendingTime
+            )
+        }
     }
 }
 
@@ -224,7 +271,8 @@ private fun ThingToDoItem(
                             }
                 }
                 Row(
-                    modifier = Modifier.padding(dimensionResource(R.dimen.padding))
+                    modifier = Modifier
+                        .padding(dimensionResource(R.dimen.padding))
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -258,6 +306,15 @@ fun StopSpendingTimeButton(
             imageVector = Icons.Filled.Stop,
             contentDescription = stringResource(R.string.stop_spending_time_icon_description, thingToDo.name)
         )
+    }
+}
+
+@Composable
+private fun AddThingToDo(
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier) {
+        Text(text = "Add something new to do")
     }
 }
 
