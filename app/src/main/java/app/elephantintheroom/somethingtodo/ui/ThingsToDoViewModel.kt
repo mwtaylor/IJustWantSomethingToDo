@@ -3,6 +3,12 @@ package app.elephantintheroom.somethingtodo.ui
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.elephantintheroom.somethingtodo.TimeUtilities
+import app.elephantintheroom.somethingtodo.TimeUtilities.startOfDay
+import app.elephantintheroom.somethingtodo.TimeUtilities.startOfMonth
+import app.elephantintheroom.somethingtodo.TimeUtilities.monthsAgo
+import app.elephantintheroom.somethingtodo.TimeUtilities.startOfWeek
+import app.elephantintheroom.somethingtodo.TimeUtilities.startOfYear
 import app.elephantintheroom.somethingtodo.data.ThingToDo
 import app.elephantintheroom.somethingtodo.data.ThingToDoRepository
 import app.elephantintheroom.somethingtodo.data.TimeSpent
@@ -17,19 +23,12 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.Clock
 import java.time.Duration
 import java.time.Instant
-import java.time.LocalDate
-import java.time.MonthDay
-import java.time.Year
-import java.time.YearMonth
-import java.time.ZoneId
-import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
-import java.time.temporal.WeekFields
-import java.util.Calendar
 
-class ThingsToDoViewModel(private val thingToDoRepository: ThingToDoRepository) : ViewModel() {
+class ThingsToDoViewModel(private val thingToDoRepository: ThingToDoRepository, private val clock: Clock) : ViewModel() {
     @OptIn(ExperimentalCoroutinesApi::class)
 
     fun Flow<ThingsToDoRawData>.addActiveThingToDo(): Flow<ThingsToDoRawData> {
@@ -44,22 +43,6 @@ class ThingsToDoViewModel(private val thingToDoRepository: ThingToDoRepository) 
         }
     }
 
-    fun truncated(instant: Instant, chronoUnit: ChronoUnit): Instant {
-        return instant.truncatedTo(chronoUnit)
-    }
-
-    fun startOfWeek(instant: Instant): Instant {
-        return LocalDate.from(instant.atZone(ZoneId.systemDefault())).with(WeekFields.SUNDAY_START.firstDayOfWeek).atStartOfDay(ZoneId.systemDefault()).toInstant()
-    }
-
-    fun startOfMonth(instant: Instant): Instant {
-        return YearMonth.from(instant.atZone(ZoneId.systemDefault())).atDay(1).atStartOfDay(ZoneId.systemDefault()).toInstant()
-    }
-
-    fun startOfYear(instant: Instant): Instant {
-        return Year.from(instant.atZone(ZoneId.systemDefault())).atDay(1).atStartOfDay(ZoneId.systemDefault()).toInstant()
-    }
-
     fun Flow<ThingsToDoRawData>.addAllRecentTimeSpent(): Flow<ThingsToDoRawData> {
         return this.flatMapLatest { thingsToDoRawData ->
             thingsToDoRawData.thingsToDoRawData.fold(listOf(mapOf<ThingToDo, ThingToDoRawData>()).asFlow()) { thingsToDoRawDataStream, thingToDo ->
@@ -67,23 +50,30 @@ class ThingsToDoViewModel(private val thingToDoRepository: ThingToDoRepository) 
                     allThingToDoRawData.plus(thingToDo to ThingToDoRawData(thingToDo, activeThingToDo))
                 }.flatMapLatest { allThingToDoRawData ->
                     val valuesToSearchForRecentTimeSpent = mapOf<Pair<ChronoUnit, Int>, (Instant) -> Instant>(
-                        Pair(ChronoUnit.DAYS, 0) to { truncated(it, ChronoUnit.DAYS) },
-                        Pair(ChronoUnit.WEEKS, 0) to ::startOfWeek,
-                        Pair(ChronoUnit.MONTHS, 0) to ::startOfMonth,
-                        Pair(ChronoUnit.MONTHS, 1) to { it.atZone(ZoneId.systemDefault()).minus(1, ChronoUnit.MONTHS).toInstant() },
-                        Pair(ChronoUnit.YEARS, 0) to ::startOfYear,
+                        Pair(ChronoUnit.DAYS, 0) to { it.startOfDay() },
+                        Pair(ChronoUnit.WEEKS, 0) to { it.startOfWeek() },
+                        Pair(ChronoUnit.MONTHS, 0) to { it.startOfMonth() },
+                        Pair(ChronoUnit.MONTHS, 1) to { it.monthsAgo(1) },
+                        Pair(ChronoUnit.YEARS, 0) to { it.startOfYear() },
                         Pair(ChronoUnit.FOREVER, 0) to { Instant.EPOCH },
                     )
                     valuesToSearchForRecentTimeSpent.keys.fold(listOf(mapOf<Pair<ChronoUnit, Int>, Duration>()).asFlow()) { allRecentTimeSpentStream, recentTimeSpentSearch ->
-                        val startSearch = valuesToSearchForRecentTimeSpent.getValue(recentTimeSpentSearch).invoke(Instant.now())
+                        val startSearch = valuesToSearchForRecentTimeSpent.getValue(recentTimeSpentSearch).invoke(Instant.now(clock))
 
                         allRecentTimeSpentStream.combine(thingToDoRepository.getRecentTimeSpentOnThingToDo(thingToDo, startSearch)) { allRecentTimeSpent, recentTimeSpent ->
                             val totalDuration = recentTimeSpent.fold(Duration.ZERO) { acc, timeSpent ->
-                                var started = timeSpent.started
-                                if (started < startSearch) {
-                                    started = startSearch
+                                if (timeSpent.finished == null) {
+                                    acc
+                                } else {
+                                    acc.plus(
+                                        TimeUtilities.durationDuringMeasurementPeriod(
+                                            timeSpent.started,
+                                            timeSpent.finished,
+                                            startSearch,
+                                            Instant.now(clock)
+                                        )
+                                    )
                                 }
-                                acc.plus(Duration.between(started, timeSpent.finished))
                             }
                             allRecentTimeSpent.plus(recentTimeSpentSearch to totalDuration)
                         }
@@ -123,14 +113,14 @@ class ThingsToDoViewModel(private val thingToDoRepository: ThingToDoRepository) 
     fun startSpendingTime(thingToDo: ThingToDo) {
         viewModelScope.launch(Dispatchers.IO) {
             thingToDoRepository.insertTimeSpent(
-                TimeSpent(thingToDoId = thingToDo.id, started = Instant.now())
+                TimeSpent(thingToDoId = thingToDo.id, started = Instant.now(clock))
             )
         }
     }
 
     fun stopSpendingTime(thingToDo: ThingToDo, timeSpent: TimeSpent) {
         viewModelScope.launch(Dispatchers.IO) {
-            thingToDoRepository.updateTimeSpent(timeSpent.copy(finished = Instant.now()))
+            thingToDoRepository.updateTimeSpent(timeSpent.copy(finished = Instant.now(clock)))
         }
     }
 

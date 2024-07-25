@@ -5,11 +5,15 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import app.elephantintheroom.somethingtodo.SomethingToDoApplication
+import java.time.Clock
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
-            ThingsToDoViewModel(wantSomethingToDoApplication().container.thingToDoRepository)
+            ThingsToDoViewModel(
+                wantSomethingToDoApplication().container.thingToDoRepository,
+                Clock.systemDefaultZone()
+            )
         }
     }
 }
