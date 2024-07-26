@@ -124,6 +124,12 @@ class ThingsToDoViewModel(private val thingToDoRepository: ThingToDoRepository, 
         }
     }
 
+    fun addThingToDo(thingToDo: ThingToDo) {
+        viewModelScope.launch(Dispatchers.IO) {
+            thingToDoRepository.insertThingToDo(thingToDo)
+        }
+    }
+
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }

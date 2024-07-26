@@ -15,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -41,7 +42,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             IJustWantSomethingToDoTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -82,8 +82,14 @@ fun IJustWantSomethingToDoApp(
                     stopSpendingTime = viewModel::stopSpendingTime,
                 )
             }
-            composable(route = AppScreen.AddThingToDo.name) {
-                AddThingToDoScreen()
+            composable(route = AppScreen.AddThingToDo.name) { navBackStackEntry ->
+                val addViewModel: ThingsToDoViewModel = viewModel(navBackStackEntry, factory = AppViewModelProvider.Factory)
+                AddThingToDoScreen(
+                    onAddThingToDo = {
+                        addViewModel.addThingToDo(it)
+                        navController.navigate(AppScreen.Start.name)
+                    }
+                )
             }
         }
     }
