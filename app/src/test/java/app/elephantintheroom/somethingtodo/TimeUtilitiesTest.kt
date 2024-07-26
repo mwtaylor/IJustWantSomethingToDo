@@ -1,5 +1,6 @@
 package app.elephantintheroom.somethingtodo
 
+import app.elephantintheroom.somethingtodo.TimeUtilities.monthsAgo
 import app.elephantintheroom.somethingtodo.TimeUtilities.startOfDay
 import app.elephantintheroom.somethingtodo.TimeUtilities.startOfMonth
 import app.elephantintheroom.somethingtodo.TimeUtilities.startOfWeek
@@ -59,6 +60,21 @@ class TimeUtilitiesTest {
             .isEqualTo(
                 instantFromDateTime(
                     LocalDateTime.of(2024, 7, 1, 0, 0)
+                )
+            )
+    }
+
+    @Test
+    fun monthsAgoTest() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+        assertThat(
+            instantFromDateTime(
+                LocalDateTime.of(2024, 7, 23, 13, 30)
+            ).monthsAgo(3)
+        )
+            .isEqualTo(
+                instantFromDateTime(
+                    LocalDateTime.of(2024, 4, 23, 0, 0)
                 )
             )
     }

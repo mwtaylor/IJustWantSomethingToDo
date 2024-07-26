@@ -38,9 +38,9 @@ object TimeUtilities {
             .toInstant()
     }
 
-    fun Instant.monthsAgo(months: Int): Instant {
+    fun Instant.monthsAgo(months: Long): Instant {
         return LocalDate.from(atDefaultZone())
-            .minus(1, ChronoUnit.MONTHS)
+            .minus(months, ChronoUnit.MONTHS)
             .atStartOfDayInDefaultZone()
             .toInstant()
     }
