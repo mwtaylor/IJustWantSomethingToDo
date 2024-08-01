@@ -16,6 +16,7 @@ import app.elephantintheroom.somethingtodo.data.ThingToDo
 fun AddThingToDoScreen(
     modifier: Modifier = Modifier,
     onAddThingToDo: (ThingToDo) -> Unit,
+    onCancelAddingThingToDo: () -> Unit,
 ) {
     Column(modifier) {
         Text(text = "Add something new to do")
@@ -31,6 +32,12 @@ fun AddThingToDoScreen(
             onClick = { onAddThingToDo(ThingToDo(name = name)) },
         ) {
             Text(text = "Add")
+        }
+
+        Button(
+            onClick = { onCancelAddingThingToDo() },
+        ) {
+            Text(text = "Cancel")
         }
     }
 }

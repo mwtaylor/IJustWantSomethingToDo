@@ -10,9 +10,21 @@ import java.time.Clock
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
+            AppViewModel(
+                wantSomethingToDoApplication().container.thingToDoRepository,
+                Clock.systemDefaultZone(),
+            )
+        }
+        initializer {
             ThingsToDoViewModel(
                 wantSomethingToDoApplication().container.thingToDoRepository,
-                Clock.systemDefaultZone()
+                Clock.systemDefaultZone(),
+            )
+        }
+        initializer {
+            AddThingToDoViewModel(
+                wantSomethingToDoApplication().container.thingToDoRepository,
+                Clock.systemDefaultZone(),
             )
         }
     }

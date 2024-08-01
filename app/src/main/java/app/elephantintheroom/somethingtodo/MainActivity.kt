@@ -22,8 +22,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import app.elephantintheroom.somethingtodo.data.previewThingsToDo
 import app.elephantintheroom.somethingtodo.data.previewTimeSpent
+import app.elephantintheroom.somethingtodo.ui.AddThingToDoViewModel
+import app.elephantintheroom.somethingtodo.ui.AppViewModel
 import app.elephantintheroom.somethingtodo.ui.ThingsToDoViewModel
 import app.elephantintheroom.somethingtodo.ui.AppViewModelProvider
+import app.elephantintheroom.somethingtodo.ui.BaseViewModel
 import app.elephantintheroom.somethingtodo.ui.ThingToDoWithTimeSpent
 import app.elephantintheroom.somethingtodo.ui.components.AddNewThingToDoFloatingButton
 import app.elephantintheroom.somethingtodo.ui.screens.AddThingToDoScreen
@@ -36,7 +39,7 @@ enum class AppScreen(@StringRes val title: Int) {
 }
 
 class MainActivity : ComponentActivity() {
-    private val viewModel: ThingsToDoViewModel by viewModels { AppViewModelProvider.Factory }
+    private val viewModel: AppViewModel by viewModels { AppViewModelProvider.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,11 +58,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun IJustWantSomethingToDoApp(
-    viewModel: ThingsToDoViewModel,
+    viewModel: AppViewModel,
     navController: NavHostController = rememberNavController(),
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-
     Scaffold(
         floatingActionButton = {
             AddNewThingToDoFloatingButton(
@@ -74,16 +75,18 @@ fun IJustWantSomethingToDoApp(
                 .fillMaxSize()
                 .padding(contentPadding)
         ) {
-            composable(route = AppScreen.Start.name) {
+            composable(route = AppScreen.Start.name) { navBackStackEntry ->
+                val thingsToDoViewModel: ThingsToDoViewModel = viewModel(navBackStackEntry, factory = AppViewModelProvider.Factory)
+                val uiState by thingsToDoViewModel.uiState.collectAsState()
                 ThingsToDoScreen(
                     uiState.thingsToDo,
                     activeTimeSpent = uiState.activeThingToDo,
-                    startSpendingTime = viewModel::startSpendingTime,
-                    stopSpendingTime = viewModel::stopSpendingTime,
+                    startSpendingTime = thingsToDoViewModel::startSpendingTime,
+                    stopSpendingTime = thingsToDoViewModel::stopSpendingTime,
                 )
             }
             composable(route = AppScreen.AddThingToDo.name) { navBackStackEntry ->
-                val addViewModel: ThingsToDoViewModel = viewModel(navBackStackEntry, factory = AppViewModelProvider.Factory)
+                val addViewModel: AddThingToDoViewModel = viewModel(navBackStackEntry, factory = AppViewModelProvider.Factory)
                 AddThingToDoScreen(
                     onAddThingToDo = {
                         addViewModel.addThingToDo(it)

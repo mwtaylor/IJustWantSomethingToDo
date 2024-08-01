@@ -28,7 +28,8 @@ import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-class ThingsToDoViewModel(private val thingToDoRepository: ThingToDoRepository, private val clock: Clock) : ViewModel() {
+class ThingsToDoViewModel(private val thingToDoRepository: ThingToDoRepository, private val clock: Clock)
+    : BaseViewModel(thingToDoRepository, clock), ViewModelCanAddANewThingToDo by ViewModelCanAddANewThingToDoQ(thingToDoRepository, clock) {
     @OptIn(ExperimentalCoroutinesApi::class)
 
     fun Flow<ThingsToDoRawData>.addActiveThingToDo(): Flow<ThingsToDoRawData> {
@@ -122,16 +123,6 @@ class ThingsToDoViewModel(private val thingToDoRepository: ThingToDoRepository, 
         viewModelScope.launch(Dispatchers.IO) {
             thingToDoRepository.updateTimeSpent(timeSpent.copy(finished = Instant.now(clock)))
         }
-    }
-
-    fun addThingToDo(thingToDo: ThingToDo) {
-        viewModelScope.launch(Dispatchers.IO) {
-            thingToDoRepository.insertThingToDo(thingToDo)
-        }
-    }
-
-    companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
     }
 }
 
