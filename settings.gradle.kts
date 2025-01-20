@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "I Just Want Something To Do"
 include(":app")
- 
