@@ -7,13 +7,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import app.elephantintheroom.ijustwantsomethingtodo.ui.theme.IJustWantSomethingToDoTheme
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
+fun MainScreen(uiState: AppUiState, modifier: Modifier = Modifier) {
     Column {
         Greeting(
-            name = "Android",
+            name = uiState.name,
         )
         RunnableTaskList(
-            tasks = listOf("Work", "Play"),
+            tasks = uiState.tasks,
         )
     }
 }
@@ -22,6 +22,11 @@ fun MainScreen(modifier: Modifier = Modifier) {
 @Composable
 fun MainScreenPreview() {
     IJustWantSomethingToDoTheme {
-        MainScreen()
+        MainScreen(
+            AppUiState(
+                "Android",
+                listOf("Work", "Play")
+            )
+        )
     }
 }
