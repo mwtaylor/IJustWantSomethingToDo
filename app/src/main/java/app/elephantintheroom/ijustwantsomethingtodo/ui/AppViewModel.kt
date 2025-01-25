@@ -20,6 +20,10 @@ class AppViewModel : ViewModel() {
         SharingStarted.Eagerly,
         _uiState.value
     )
+
+    fun startTask(name: String) {
+
+    }
 }
 
 @Immutable

@@ -42,6 +42,7 @@ class MainActivity : ComponentActivity() {
             Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                 MainScreen(
                     uiState,
+                    appViewModel::startTask,
                     modifier = Modifier.padding(innerPadding)
                 )
             }
