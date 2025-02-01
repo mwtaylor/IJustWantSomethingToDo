@@ -20,7 +20,7 @@ import app.elephantintheroom.ijustwantsomethingtodo.ui.theme.IJustWantSomethingT
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-    private val appViewModel: AppViewModel by viewModels()
+    private val appViewModel: AppViewModel by viewModels(factoryProducer = { AppViewModelProvider.Factory })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
