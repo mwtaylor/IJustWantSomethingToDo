@@ -1,4 +1,4 @@
-package app.elephantintheroom.ijustwantsomethingtodo.db.entity
+package app.elephantintheroom.ijustwantsomethingtodo.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

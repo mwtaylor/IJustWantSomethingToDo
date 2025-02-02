@@ -1,14 +1,16 @@
 [versions]
+activityCompose = "1.10.0"
 agp = "8.8.0"
-kotlin = "2.0.0"
-ksp = "2.0.0-1.0.24"
-coreKtx = "1.10.1"
+androidTools = "31.8.0"
+composeBom = "2025.01.01"
+coreKtx = "1.15.0"
+espressoCore = "3.6.1"
 junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
-lifecycleRuntimeKtx = "2.6.1"
-activityCompose = "1.8.0"
-composeBom = "2024.04.01"
+junitVersion = "1.2.1"
+kotlin = "2.1.0"
+kotlinxCoroutines = "1.10.1"
+ksp = "2.1.0-1.0.29"
+lifecycleRuntimeKtx = "2.8.7"
 lifecycleRuntimeComposeAndroid = "2.8.7"
 room = "2.6.1"
 
@@ -31,9 +33,25 @@ androidx-lifecycle-runtime-compose-android = { group = "androidx.lifecycle", nam
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
+
+# Dependencies of the included build-logic
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
+compose-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+room = { id = "androidx.room", version.ref = "room" }
+
+ijustwantsomethingtodo-android-application = { id = "ijustwantsomethingtodo.android.application" }
+ijustwantsomethingtodo-android-compose = { id = "ijustwantsomethingtodo.android.compose" }
+ijustwantsomethingtodo-android-library = { id = "ijustwantsomethingtodo.android.library" }
+ijustwantsomethingtodo-room = { id = "ijustwantsomethingtodo.room" }

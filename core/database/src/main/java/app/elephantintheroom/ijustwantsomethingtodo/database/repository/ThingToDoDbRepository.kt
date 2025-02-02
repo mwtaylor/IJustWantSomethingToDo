@@ -1,9 +1,9 @@
-package app.elephantintheroom.ijustwantsomethingtodo.db.repository
+package app.elephantintheroom.ijustwantsomethingtodo.database.repository
 
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.ThingToDoRepository
-import app.elephantintheroom.ijustwantsomethingtodo.db.dao.ThingToDoDao
-import app.elephantintheroom.ijustwantsomethingtodo.db.entity.ThingToDoEntity
+import app.elephantintheroom.ijustwantsomethingtodo.database.dao.ThingToDoDao
+import app.elephantintheroom.ijustwantsomethingtodo.database.entity.ThingToDoEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

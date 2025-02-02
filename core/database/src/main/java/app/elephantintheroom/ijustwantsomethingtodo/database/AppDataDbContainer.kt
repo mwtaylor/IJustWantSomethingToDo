@@ -1,8 +1,8 @@
-package app.elephantintheroom.ijustwantsomethingtodo.db
+package app.elephantintheroom.ijustwantsomethingtodo.database
 
 import android.content.Context
 import app.elephantintheroom.ijustwantsomethingtodo.data.AppDataContainer
-import app.elephantintheroom.ijustwantsomethingtodo.db.repository.ThingToDoDbRepository
+import app.elephantintheroom.ijustwantsomethingtodo.database.repository.ThingToDoDbRepository
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.ThingToDoRepository
 
 class AppDataDbContainer(private val context: Context) : AppDataContainer {
