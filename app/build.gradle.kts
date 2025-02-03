@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.ijustwantsomethingtodo.android.application)
     alias(libs.plugins.ijustwantsomethingtodo.android.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -29,6 +30,10 @@ android {
 dependencies {
     implementation(projects.core.data)
     implementation(projects.core.database)
+    implementation(libs.androidx.material3.adaptive.navigation.suite.android)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
