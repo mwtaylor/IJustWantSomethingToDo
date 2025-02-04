@@ -28,7 +28,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 // A sub-project can only depend on something lower than it in the order
 include(":app")
 include(":screens:welcome")
-include(":screens:tasks")
+include(":screens:thingstodo")
 include(":screens:planning")
 include(":screens:reports")
 include(":core:database")

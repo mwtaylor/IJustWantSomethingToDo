@@ -5,8 +5,8 @@ import androidx.navigation.NavController
 import app.elephantintheroom.ijustwantsomethingtodo.R
 import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.navigation.WelcomeRoute
 import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.navigation.navigateToWelcome
-import app.elephantintheroom.ijustwantsomethingtodo.screens.tasks.navigation.TasksRoute
-import app.elephantintheroom.ijustwantsomethingtodo.screens.tasks.navigation.navigateToTasks
+import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.navigation.ThingsToDoRoute
+import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.navigation.navigateToThingsToDo
 import app.elephantintheroom.ijustwantsomethingtodo.screens.planning.navigation.PlanningRoute
 import app.elephantintheroom.ijustwantsomethingtodo.screens.planning.navigation.navigateToPlanning
 import app.elephantintheroom.ijustwantsomethingtodo.screens.reports.navigation.ReportsRoute
@@ -25,8 +25,8 @@ enum class AppDestinations(
     ),
     TASKS(
         label = R.string.tasks,
-        route = TasksRoute::class,
-        onClick = { it.navigateToTasks() },
+        route = ThingsToDoRoute::class,
+        onClick = { it.navigateToThingsToDo() },
     ),
     PLANNING(
         label = R.string.planning,

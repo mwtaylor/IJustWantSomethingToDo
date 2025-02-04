@@ -7,7 +7,7 @@ import app.elephantintheroom.ijustwantsomethingtodo.screens.planning.ui.planning
 import app.elephantintheroom.ijustwantsomethingtodo.screens.reports.ui.reportsScreen
 import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.navigation.WelcomeRoute
 import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.ui.welcomeScreen
-import app.elephantintheroom.ijustwantsomethingtodo.screens.tasks.ui.tasksScreen
+import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ui.thingsToDoScreen
 import app.elephantintheroom.ijustwantsomethingtodo.ui.AppUiState
 
 @Composable
@@ -22,7 +22,7 @@ fun AppNavHost(
         modifier = modifier,
     ) {
         welcomeScreen()
-        tasksScreen()
+        thingsToDoScreen()
         planningScreen()
         reportsScreen()
     }
