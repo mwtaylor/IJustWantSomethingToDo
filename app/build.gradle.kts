@@ -28,9 +28,13 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data)
+    implementation(projects.screens.welcome)
+    implementation(projects.screens.tasks)
+    implementation(projects.screens.planning)
+    implementation(projects.screens.reports)
     implementation(projects.core.database)
-    implementation(libs.androidx.material3.adaptive.navigation.suite.android)
+    implementation(projects.core.data)
+    implementation(libs.androidx.compose.material3.adaptive.navigation.suite.android)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
@@ -38,7 +42,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

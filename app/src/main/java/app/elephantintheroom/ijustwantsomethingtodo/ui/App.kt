@@ -41,7 +41,7 @@ fun App(
                     },
                     label = { Text(stringResource(it.label)) },
                     selected = false,
-                    onClick = {  },
+                    onClick = { it.onClick(appUiState.navController) },
                 )
             }
         },

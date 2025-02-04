@@ -1,4 +1,4 @@
-package app.elephantintheroom.ijustwantsomethingtodo.navigation
+package app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavOptionsBuilder

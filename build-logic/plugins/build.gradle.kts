@@ -47,6 +47,10 @@ gradlePlugin {
             id = libs.plugins.ijustwantsomethingtodo.android.library.get().pluginId
             implementationClass = "AndroidLibraryPlugin"
         }
+        register("ijustwantsomethingtodoAndroidNavigation") {
+            id = libs.plugins.ijustwantsomethingtodo.android.navigation.get().pluginId
+            implementationClass = "AndroidNavigationPlugin"
+        }
         register("ijustwantsomethingtodoRoom") {
             id = libs.plugins.ijustwantsomethingtodo.room.get().pluginId
             implementationClass = "RoomPlugin"
