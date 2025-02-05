@@ -3,11 +3,9 @@ package app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ui
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
-import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
 import androidx.compose.material3.adaptive.layout.PaneScaffoldDirective
 import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldValue
-import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +28,7 @@ fun ThingsToDoListDetail(
             AnimatedPane {
                 ThingsToDoListPane(
                     thingsToDo = items,
+                    expandFloatingAddButton = scaffoldDirective.maxHorizontalPartitions > 1,
                     onItemClick = onItemClick,
                 )
             }
@@ -61,6 +60,6 @@ fun ThingToDoListDetailPreview() {
             ThingToDoListItem(2, "submit code review"),
         ),
         ThingToDoListItem(1, "fix bugs"),
-        {}
+        {},
     )
 }

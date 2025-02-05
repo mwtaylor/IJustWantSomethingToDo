@@ -1,6 +1,7 @@
 package app.elephantintheroom.ijustwantsomethingtodo.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -42,11 +43,12 @@ fun App(
     ) {
         Scaffold(
             modifier = modifier
-        ) { padding ->
+        ) { innerPadding ->
             Box(
                 Modifier
                     .fillMaxSize()
-                    .padding(padding)
+                    .padding(innerPadding)
+                    .consumeWindowInsets(innerPadding)
             ) {
                 AppNavHost(appUiState)
             }
