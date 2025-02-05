@@ -12,20 +12,24 @@ import app.elephantintheroom.ijustwantsomethingtodo.database.entity.ThingToDoEnt
     entities = [ThingToDoEntity::class],
     exportSchema = true,
 )
-internal abstract class AppDatabase : RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
     abstract fun thingToDoDao(): ThingToDoDao
 
     companion object {
         @Volatile
         private var Instance: AppDatabase? = null
 
-        fun getDatabase(context: Context): AppDatabase {
+        internal fun getDatabase(context: Context): AppDatabase {
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(context, AppDatabase::class.java, "app_database")
                     .fallbackToDestructiveMigration()
                     .build()
                     .also { Instance = it }
             }
+        }
+
+        fun getThingToDoDao(context: Context): ThingToDoDao {
+            return getDatabase(context).thingToDoDao()
         }
     }
 }

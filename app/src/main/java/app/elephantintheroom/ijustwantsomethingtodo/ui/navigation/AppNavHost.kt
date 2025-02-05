@@ -22,7 +22,7 @@ fun AppNavHost(
         modifier = modifier,
     ) {
         welcomeScreen()
-        thingsToDoScreen()
+        thingsToDoScreen(navController)
         planningScreen()
         reportsScreen()
     }

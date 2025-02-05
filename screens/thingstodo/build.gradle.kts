@@ -9,5 +9,6 @@ android {
     namespace = "app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo"
 }
 dependencies {
+    implementation(projects.core.data)
     implementation(libs.androidx.adaptive.navigation.android)
 }
