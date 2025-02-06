@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="addThingToDo">New thing to do</string>
+    <string name="addThingToDo">Add a new thing to do</string>
+    <string name="newThingToDo">New Thing To Do</string>
+    <string name="cancelAddingNewThingToDo">Cancel adding a new thing to do</string>
+    <string name="saveNewThingToDo">Save the new thing to do</string>
 </resources>

@@ -54,6 +54,12 @@ fun ThingsToDoScreen(
         onItemClick = {
             navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, it)
         },
+        onNewThingToDoClick = {
+            navigator.navigateTo(
+                ListDetailPaneScaffoldRole.Extra,
+                navigator.currentDestination?.content,
+            )
+        },
         modifier,
     )
 }

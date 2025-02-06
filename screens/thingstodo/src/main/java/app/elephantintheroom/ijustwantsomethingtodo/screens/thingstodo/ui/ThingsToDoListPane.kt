@@ -15,11 +15,17 @@ import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.Thi
 fun ThingsToDoListPane(
     thingsToDo: List<ThingToDoListItem>,
     onItemClick: (ThingToDoListItem) -> Unit,
+    onNewThingToDoClick: () -> Unit,
     modifier: Modifier = Modifier,
     expandFloatingAddButton: Boolean = false,
 ) {
     Scaffold(
-        floatingActionButton = { NewThingToDoButton(includeText = expandFloatingAddButton) },
+        floatingActionButton = {
+            NewThingToDoButton(
+                includeText = expandFloatingAddButton,
+                onClick = onNewThingToDoClick
+            )
+        },
         modifier = modifier,
     ) { innerPadding ->
         LazyColumn(
@@ -56,6 +62,7 @@ fun ThingsToDoListPanePreview() {
             ThingToDoListItem(2, "submit code review"),
             ThingToDoListItem(3, "merge code"),
         ),
-        onItemClick = {},
+        {},
+        {},
     )
 }
