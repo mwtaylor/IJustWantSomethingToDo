@@ -15,6 +15,11 @@ class ThingToDoDbRepository(
         thingToDoDao.getAll().map { allThingsToDo ->
             allThingsToDo.map { it.toModel() }
         }
+
+    override suspend fun addThingToDo(thingToDo: ThingToDo): ThingToDo {
+        val id = thingToDoDao.insert(ThingToDoEntity(null, thingToDo.name))
+        return thingToDoDao.get(id).toModel()
+    }
 }
 
 fun ThingToDoEntity.toModel(): ThingToDo {

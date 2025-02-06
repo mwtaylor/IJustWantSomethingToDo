@@ -5,4 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface ThingToDoRepository {
     fun getAllThingsToDo(): Flow<List<ThingToDo>>
+
+    suspend fun addThingToDo(thingToDo: ThingToDo): ThingToDo
 }

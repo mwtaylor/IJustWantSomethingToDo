@@ -8,7 +8,7 @@ import app.elephantintheroom.ijustwantsomethingtodo.database.dao.ThingToDoDao
 import app.elephantintheroom.ijustwantsomethingtodo.database.entity.ThingToDoEntity
 
 @Database(
-    version = 1,
+    version = 2,
     entities = [ThingToDoEntity::class],
     exportSchema = true,
 )

@@ -10,6 +10,7 @@ import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldValue
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ThingToDoListItem
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -19,8 +20,10 @@ fun ThingsToDoListDetail(
     scaffoldValue: ThreePaneScaffoldValue,
     items: List<ThingToDoListItem>,
     content: ThingToDoListItem?,
-    onItemClick: (ThingToDoListItem) -> Unit,
-    onNewThingToDoClick: () -> Unit,
+    onSelectItem: (ThingToDoListItem) -> Unit,
+    onBeginNewThingToDo: () -> Unit,
+    onAddNewThingToDo: (ThingToDo) -> Unit,
+    onCancelNewThingToDo: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ListDetailPaneScaffold(
@@ -31,8 +34,8 @@ fun ThingsToDoListDetail(
                 ThingsToDoListPane(
                     thingsToDo = items,
                     expandFloatingAddButton = scaffoldDirective.maxHorizontalPartitions > 1,
-                    onItemClick = onItemClick,
-                    onNewThingToDoClick = onNewThingToDoClick,
+                    onItemClick = onSelectItem,
+                    onNewThingToDoClick = onBeginNewThingToDo,
                 )
             }
         },
@@ -46,8 +49,8 @@ fun ThingsToDoListDetail(
         extraPane = {
             AnimatedPane {
                 NewThingToDoPane(
-                    save = {},
-                    cancel = {},
+                    save = onAddNewThingToDo,
+                    cancel = onCancelNewThingToDo,
                 )
             }
         },
@@ -65,12 +68,18 @@ fun ThingsToDoListDetail(
 fun ThingToDoListDetailPreview() {
     ThingsToDoListDetail(
         PaneScaffoldDirective.Default,
-        ThreePaneScaffoldValue(PaneAdaptedValue.Expanded, PaneAdaptedValue.Expanded, PaneAdaptedValue.Hidden),
+        ThreePaneScaffoldValue(
+            PaneAdaptedValue.Expanded,
+            PaneAdaptedValue.Expanded,
+            PaneAdaptedValue.Hidden,
+        ),
         listOf(
             ThingToDoListItem(1, "fix bugs"),
             ThingToDoListItem(2, "submit code review"),
         ),
         ThingToDoListItem(1, "fix bugs"),
+        {},
+        {},
         {},
         {},
     )

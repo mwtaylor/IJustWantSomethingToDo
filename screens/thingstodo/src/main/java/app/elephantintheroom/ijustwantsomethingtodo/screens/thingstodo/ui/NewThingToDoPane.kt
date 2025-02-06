@@ -25,11 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.R
 
 @Composable
 fun NewThingToDoPane(
-    save: (String) -> Unit,
+    save: (ThingToDo) -> Unit,
     cancel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -70,7 +71,7 @@ fun NewThingToDoPane(
             )
 
             FilledIconButton(
-                onClick = { save(name) },
+                onClick = { save(ThingToDo(null, name)) },
             ) {
                 Icon(
                     Icons.Default.Done,

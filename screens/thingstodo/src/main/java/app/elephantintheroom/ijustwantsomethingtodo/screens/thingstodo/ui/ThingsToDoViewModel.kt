@@ -8,9 +8,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class ThingsToDoViewModel(
-    thingToDoRepository: ThingToDoRepository
+    private val thingToDoRepository: ThingToDoRepository
 ) : ViewModel() {
     val uiState: StateFlow<ThingsToDoUiState> = thingToDoRepository.getAllThingsToDo().map {
         ThingsToDoUiState(it)
@@ -19,6 +20,13 @@ class ThingsToDoViewModel(
         SharingStarted.WhileSubscribed(5_000),
         ThingsToDoUiState(emptyList())
     )
+
+    fun addThingToDo(thingToDo: ThingToDo, onComplete: (ThingToDo) -> Unit = {}) {
+        viewModelScope.launch {
+            val newThingToDo = thingToDoRepository.addThingToDo(thingToDo)
+            onComplete(newThingToDo)
+        }
+    }
 }
 
 data class ThingsToDoUiState(
