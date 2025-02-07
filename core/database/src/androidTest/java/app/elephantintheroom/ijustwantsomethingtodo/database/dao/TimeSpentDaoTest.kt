@@ -11,6 +11,27 @@ import kotlin.test.assertNull
 
 internal class TimeSpentDaoTest : DatabaseTestBase() {
     @Test
+    fun testBasicInsertAndGet() = runTest {
+        thingToDoDao.insert(
+            ThingToDoEntity(name = "")
+        )
+
+        val id = timeSpentDao.insert(
+            TimeSpentEntity(thingToDoId = 1, started = Instant.now())
+        )
+        assertEquals(
+            1,
+            id,
+        )
+
+        val timeSpentEntity = timeSpentDao.get(id)
+        assertEquals(
+            1,
+            timeSpentEntity.id,
+        )
+    }
+
+    @Test
     fun testInsertAndRetrieveActiveThingToDo() = runTest {
         thingToDoDao.insert(
             ThingToDoEntity(name = "")
