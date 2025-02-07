@@ -5,11 +5,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ExistingThingToDoListItem
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ThingToDoListItem
 
 @Composable
 fun ThingToDoDetailPane(
-    thingToDo: ThingToDoListItem,
+    thingToDo: ExistingThingToDoListItem,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -25,6 +26,6 @@ fun ThingToDoDetailPane(
 @Composable
 fun ThingToDoDetailPanePreview() {
     ThingToDoDetailPane(
-        ThingToDoListItem(1, "fix bugs")
+        ExistingThingToDoListItem(1, "fix bugs")
     )
 }

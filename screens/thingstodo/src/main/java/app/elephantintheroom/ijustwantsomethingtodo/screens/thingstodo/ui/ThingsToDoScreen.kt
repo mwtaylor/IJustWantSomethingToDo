@@ -3,6 +3,8 @@ package app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ui
 import androidx.activity.compose.BackHandler
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldDestinationItem
+import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.BackNavigationBehavior
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
@@ -17,6 +19,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ThingToDoViewModelProvider
+import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ExistingThingToDoListItem
+import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.NewThingToDoListItem
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ThingToDoListItem
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.navigation.ThingsToDoRoute
 import kotlinx.coroutines.launch
@@ -56,7 +60,7 @@ fun ThingsToDoScreen(
     ThingsToDoListDetail(
         navigator.scaffoldDirective,
         navigator.scaffoldValue,
-        uiState.thingsToDo.map { ThingToDoListItem(it.id, it.name) },
+        uiState.thingsToDo.map { ExistingThingToDoListItem(it.id, it.name) },
         navigator.currentDestination?.content,
         onSelectItem = {
             coroutineScope.launch {
@@ -65,19 +69,16 @@ fun ThingsToDoScreen(
         },
         onBeginNewThingToDo = {
             coroutineScope.launch {
-                navigator.navigateTo(
-                    ListDetailPaneScaffoldRole.Extra,
-                    navigator.currentDestination?.content,
-                )
+                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, NewThingToDoListItem)
             }
         },
         onAddNewThingToDo = { thingToDo ->
             val onComplete: (ThingToDo) -> Unit = { newThingToDo ->
                 coroutineScope.launch {
-                    navigator.navigateBack(BackNavigationBehavior.PopUntilScaffoldValueChange)
+                    navigator.navigateBack(BackNavigationBehavior.PopLatest)
                     navigator.navigateTo(
                         ListDetailPaneScaffoldRole.Detail,
-                        ThingToDoListItem(newThingToDo.id, newThingToDo.name),
+                        ExistingThingToDoListItem(newThingToDo.id, newThingToDo.name),
                     )
                 }
             }
@@ -85,8 +86,7 @@ fun ThingsToDoScreen(
         },
         onCancelNewThingToDo = {
             coroutineScope.launch {
-                if (navigator.canNavigateBack())
-                    navigator.navigateBack()
+                navigator.navigateBack(BackNavigationBehavior.PopLatest)
             }
         },
         modifier,

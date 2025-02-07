@@ -9,11 +9,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ExistingThingToDoListItem
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ThingToDoListItem
 
 @Composable
 fun ThingsToDoListPane(
-    thingsToDo: List<ThingToDoListItem>,
+    thingsToDo: List<ExistingThingToDoListItem>,
     onItemClick: (ThingToDoListItem) -> Unit,
     onNewThingToDoClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -58,9 +59,9 @@ fun ThingsToDoListPane(
 fun ThingsToDoListPanePreview() {
     ThingsToDoListPane(
         thingsToDo = listOf(
-            ThingToDoListItem(1, "fix bugs"),
-            ThingToDoListItem(2, "submit code review"),
-            ThingToDoListItem(3, "merge code"),
+            ExistingThingToDoListItem(1, "fix bugs"),
+            ExistingThingToDoListItem(2, "submit code review"),
+            ExistingThingToDoListItem(3, "merge code"),
         ),
         {},
         {},

@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
+import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ExistingThingToDoListItem
+import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.NewThingToDoListItem
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ThingToDoListItem
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -18,7 +20,7 @@ import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.Thi
 fun ThingsToDoListDetail(
     scaffoldDirective: PaneScaffoldDirective,
     scaffoldValue: ThreePaneScaffoldValue,
-    items: List<ThingToDoListItem>,
+    items: List<ExistingThingToDoListItem>,
     content: ThingToDoListItem?,
     onSelectItem: (ThingToDoListItem) -> Unit,
     onBeginNewThingToDo: () -> Unit,
@@ -41,17 +43,14 @@ fun ThingsToDoListDetail(
         },
         detailPane = {
             AnimatedPane {
-                content?.let {
-                    ThingToDoDetailPane(it)
+                when (content) {
+                    is ExistingThingToDoListItem -> ThingToDoDetailPane(content)
+                    is NewThingToDoListItem -> NewThingToDoPane(
+                        save = onAddNewThingToDo,
+                        cancel = onCancelNewThingToDo,
+                    )
+                    else -> {}
                 }
-            }
-        },
-        extraPane = {
-            AnimatedPane {
-                NewThingToDoPane(
-                    save = onAddNewThingToDo,
-                    cancel = onCancelNewThingToDo,
-                )
             }
         },
         modifier = modifier,
@@ -74,10 +73,10 @@ fun ThingToDoListDetailPreview() {
             PaneAdaptedValue.Hidden,
         ),
         listOf(
-            ThingToDoListItem(1, "fix bugs"),
-            ThingToDoListItem(2, "submit code review"),
+            ExistingThingToDoListItem(1, "fix bugs"),
+            ExistingThingToDoListItem(2, "submit code review"),
         ),
-        ThingToDoListItem(1, "fix bugs"),
+        ExistingThingToDoListItem(1, "fix bugs"),
         {},
         {},
         {},

@@ -3,5 +3,10 @@ package app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
+interface ThingToDoListItem
+
 @Parcelize
-data class ThingToDoListItem(val id: Int?, val name: String) : Parcelable
+data class ExistingThingToDoListItem(val id: Int?, val name: String) : Parcelable, ThingToDoListItem
+
+@Parcelize
+data object NewThingToDoListItem : Parcelable, ThingToDoListItem
