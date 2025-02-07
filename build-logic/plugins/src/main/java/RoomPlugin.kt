@@ -25,6 +25,9 @@ class RoomPlugin : Plugin<Project> {
                 "implementation"(libs.findLibrary("androidx.room.runtime").get())
                 "implementation"(libs.findLibrary("androidx.room.ktx").get())
                 "ksp"(libs.findLibrary("androidx.room.compiler").get())
+                "androidTestImplementation"(libs.findLibrary("kotlinx.coroutines.test").get())
+                "androidTestImplementation"(libs.findLibrary("androidx.core").get())
+                "androidTestImplementation"(libs.findLibrary("core.ktx").get())
             }
         }
     }

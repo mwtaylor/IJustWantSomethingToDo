@@ -16,4 +16,7 @@ interface ThingToDoDao {
 
     @Insert
     suspend fun insert(thingToDoEntity: ThingToDoEntity): Long
+
+    @Insert
+    suspend fun insert(thingToDoEntities: List<ThingToDoEntity>): List<Long>
 }
