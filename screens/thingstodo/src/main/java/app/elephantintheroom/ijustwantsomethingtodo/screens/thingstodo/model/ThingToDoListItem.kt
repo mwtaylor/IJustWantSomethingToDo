@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 interface ThingToDoListItem
 
 @Parcelize
-data class ExistingThingToDoListItem(val id: Long?, val name: String) : Parcelable, ThingToDoListItem
+data class ExistingThingToDoListItem(val id: Long, val name: String) : Parcelable, ThingToDoListItem
 
 @Parcelize
 data object NewThingToDoListItem : Parcelable, ThingToDoListItem

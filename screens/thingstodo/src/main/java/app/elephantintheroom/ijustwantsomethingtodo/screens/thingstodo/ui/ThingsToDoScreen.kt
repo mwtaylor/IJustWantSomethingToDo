@@ -35,15 +35,22 @@ fun NavGraphBuilder.thingsToDoScreen(navController: NavController) {
             baseEntry,
             factory = ThingToDoViewModelProvider.factory,
         )
+        val uiState: ThingsToDoUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-        ThingsToDoScreen(viewModel)
+        ThingsToDoScreen(
+            uiState,
+            viewModel::addThingToDo,
+            viewModel::startSpendingTime,
+        )
     }
 }
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun ThingsToDoScreen(
-    viewModel: ThingsToDoViewModel,
+    uiState: ThingsToDoUiState,
+    onAddNewThingToDo: (ThingToDo, (ThingToDo) -> Unit) -> Unit,
+    onStartSpendingTime: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val navigator = rememberListDetailPaneScaffoldNavigator<ThingToDoListItem>()
@@ -55,12 +62,10 @@ fun ThingsToDoScreen(
         }
     }
 
-    val uiState: ThingsToDoUiState by viewModel.uiState.collectAsStateWithLifecycle()
-
     ThingsToDoListDetail(
         navigator.scaffoldDirective,
         navigator.scaffoldValue,
-        uiState.thingsToDo.map { ExistingThingToDoListItem(it.id, it.name) },
+        uiState.thingsToDo.map { ExistingThingToDoListItem(it.id!!, it.name) },
         navigator.currentDestination?.content,
         onSelectItem = {
             coroutineScope.launch {
@@ -78,17 +83,18 @@ fun ThingsToDoScreen(
                     navigator.navigateBack(BackNavigationBehavior.PopLatest)
                     navigator.navigateTo(
                         ListDetailPaneScaffoldRole.Detail,
-                        ExistingThingToDoListItem(newThingToDo.id, newThingToDo.name),
+                        ExistingThingToDoListItem(newThingToDo.id!!, newThingToDo.name),
                     )
                 }
             }
-            viewModel.addThingToDo(thingToDo, onComplete)
+            onAddNewThingToDo(thingToDo, onComplete)
         },
         onCancelNewThingToDo = {
             coroutineScope.launch {
                 navigator.navigateBack(BackNavigationBehavior.PopLatest)
             }
         },
+        onStartSpendingTime = onStartSpendingTime,
         modifier,
     )
 }

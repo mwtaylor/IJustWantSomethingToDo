@@ -4,4 +4,5 @@
     <string name="newThingToDo">New Thing To Do</string>
     <string name="cancelAddingNewThingToDo">Cancel adding a new thing to do</string>
     <string name="saveNewThingToDo">Save the new thing to do</string>
+    <string name="startSpendingTime">Start spending time on %1$s</string>
 </resources>
