@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
@@ -25,6 +26,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isAltPressed
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.isMetaPressed
+import androidx.compose.ui.input.key.isShiftPressed
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,8 +47,28 @@ fun NewThingToDoPane(
     cancel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var name by remember { mutableStateOf("") }
+    val saveUsingInput: () -> Unit = {
+        save(ThingToDo(null, name))
+    }
+
     Scaffold(
-        modifier = modifier,
+        modifier = modifier
+            .onKeyEvent {
+                if (
+                    it.type == KeyEventType.KeyUp &&
+                    it.key == Key.Enter &&
+                    !it.isAltPressed &&
+                    !it.isCtrlPressed &&
+                    !it.isMetaPressed &&
+                    !it.isShiftPressed
+                ) {
+                    saveUsingInput()
+                    true
+                } else {
+                    false
+                }
+            },
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -65,12 +95,12 @@ fun NewThingToDoPane(
                 )
             }
 
-            var name by remember { mutableStateOf("") }
             val focusRequester = remember { FocusRequester() }
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
                 label = { Text("Name") },
+                singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(focusRequester),
@@ -80,7 +110,7 @@ fun NewThingToDoPane(
             }
 
             FilledIconButton(
-                onClick = { save(ThingToDo(null, name)) },
+                onClick = saveUsingInput,
             ) {
                 Icon(
                     Icons.Default.Done,
