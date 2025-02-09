@@ -16,7 +16,7 @@ internal class TimeSpentDaoTest : DatabaseTestBase() {
             ThingToDoEntity(name = "")
         )
 
-        val id = timeSpentDao.insert(
+        val id = timeSpentDao.record(
             TimeSpentEntity(thingToDoId = 1, started = Instant.now())
         )
         assertEquals(
@@ -37,20 +37,47 @@ internal class TimeSpentDaoTest : DatabaseTestBase() {
             ThingToDoEntity(name = "")
         )
 
-        timeSpentDao.insert(
+        timeSpentDao.record(
             TimeSpentEntity(thingToDoId = 1, started = Instant.now(), ended = Instant.now())
         )
-        timeSpentDao.insert(
+        timeSpentDao.record(
             TimeSpentEntity(thingToDoId = 1, started = Instant.now())
         )
 
         assertEquals(
             2L,
-            timeSpentDao.getActiveForThingToDo(1L).id,
+            timeSpentDao.getActiveForThingToDo(1L)?.id,
         )
 
         assertNull(
-            timeSpentDao.getActiveForThingToDo(1L).ended,
+            timeSpentDao.getActiveForThingToDo(1L)?.ended,
+        )
+    }
+
+    @Test
+    fun testUpdateActiveTimeSpentWithEndTime() = runTest {
+        thingToDoDao.insert(
+            ThingToDoEntity(name = "")
+        )
+
+        timeSpentDao.record(
+            TimeSpentEntity(
+                id = 1,
+                thingToDoId = 1,
+                started = Instant.EPOCH,
+            )
+        )
+        timeSpentDao.record(
+            TimeSpentEntity(
+                id = 1,
+                thingToDoId = 1,
+                started = Instant.EPOCH,
+                ended = Instant.ofEpochSecond(1)
+            )
+        )
+
+        assertNull(
+            timeSpentDao.getActiveForThingToDo(1)
         )
     }
 }

@@ -2,10 +2,12 @@ package app.elephantintheroom.ijustwantsomethingtodo.database.dao
 
 import app.elephantintheroom.ijustwantsomethingtodo.database.DatabaseTestBase
 import app.elephantintheroom.ijustwantsomethingtodo.database.entity.ThingToDoEntity
+import app.elephantintheroom.ijustwantsomethingtodo.database.entity.TimeSpentEntity
 import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import java.time.Instant
 import kotlin.test.assertContains
 
 internal class ThingToDoDaoTest : DatabaseTestBase() {
@@ -63,6 +65,32 @@ internal class ThingToDoDaoTest : DatabaseTestBase() {
         assertEquals(
             listOf(1L, 2L),
             thingToDoEntities.map { it.id },
+        )
+    }
+
+    @Test
+    fun testGetAllIncludingActiveTimeSpent() = runTest {
+        thingToDoDao.insert(listOf(
+            ThingToDoEntity(name = "first thing to do"),
+            ThingToDoEntity(name = "second thing to do"),
+            ThingToDoEntity(name = "third thing to do"),
+        ))
+        timeSpentDao.record(
+            TimeSpentEntity(thingToDoId = 2, started = Instant.EPOCH)
+        )
+        timeSpentDao.record(
+            TimeSpentEntity(thingToDoId = 3, started = Instant.EPOCH, ended = Instant.now())
+        )
+
+        val thingToDoIncludingActiveTimeSpentEntities = thingToDoDao.getAllIncludingActiveTimeSpent().first()
+
+        assertEquals(
+            listOf(1L, 2L, 3L),
+            thingToDoIncludingActiveTimeSpentEntities.map { it.thingToDoEntity.id },
+        )
+        assertEquals(
+            listOf(null, 1L, null),
+            thingToDoIncludingActiveTimeSpentEntities.map { it.activeTimeSpentEntity?.id },
         )
     }
 }

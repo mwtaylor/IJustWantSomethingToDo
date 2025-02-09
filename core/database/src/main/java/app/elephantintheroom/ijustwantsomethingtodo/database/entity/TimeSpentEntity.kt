@@ -11,22 +11,22 @@ import java.time.Instant
     foreignKeys = [
         ForeignKey(
             entity = ThingToDoEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["thing_to_do_id"]
+            parentColumns = ["thing_to_do_id"],
+            childColumns = ["time_spent_thing_to_do_id"]
         )
     ]
 )
 data class TimeSpentEntity(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = "time_spent_id")
     val id: Long? = null,
 
-    @ColumnInfo(name = "thing_to_do_id")
+    @ColumnInfo(name = "time_spent_thing_to_do_id")
     val thingToDoId: Long,
 
-    @ColumnInfo(name = "started")
+    @ColumnInfo(name = "time_spent_started")
     val started: Instant,
 
-    @ColumnInfo(name = "ended")
+    @ColumnInfo(name = "time_spent_ended")
     val ended: Instant? = null,
 )

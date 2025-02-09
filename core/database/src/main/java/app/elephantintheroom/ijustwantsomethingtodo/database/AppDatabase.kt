@@ -12,7 +12,7 @@ import app.elephantintheroom.ijustwantsomethingtodo.database.entity.ThingToDoEnt
 import app.elephantintheroom.ijustwantsomethingtodo.database.entity.TimeSpentEntity
 
 @Database(
-    version = 3,
+    version = 4,
     entities = [
         ThingToDoEntity::class,
         TimeSpentEntity::class,

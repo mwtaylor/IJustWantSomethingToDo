@@ -1,0 +1,90 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 4,
+    "identityHash": "1c155bd706ee9dcdc410a55645dd3d82",
+    "entities": [
+      {
+        "tableName": "things_to_do",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`thing_to_do_id` INTEGER PRIMARY KEY AUTOINCREMENT, `thing_to_do_name` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "thing_to_do_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "thing_to_do_name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "thing_to_do_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "time_spent",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`time_spent_id` INTEGER PRIMARY KEY AUTOINCREMENT, `time_spent_thing_to_do_id` INTEGER NOT NULL, `time_spent_started` INTEGER NOT NULL, `time_spent_ended` INTEGER, FOREIGN KEY(`time_spent_thing_to_do_id`) REFERENCES `things_to_do`(`thing_to_do_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "time_spent_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "thingToDoId",
+            "columnName": "time_spent_thing_to_do_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "started",
+            "columnName": "time_spent_started",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ended",
+            "columnName": "time_spent_ended",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "time_spent_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "things_to_do",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "time_spent_thing_to_do_id"
+            ],
+            "referencedColumns": [
+              "thing_to_do_id"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1c155bd706ee9dcdc410a55645dd3d82')"
+    ]
+  }
+}
