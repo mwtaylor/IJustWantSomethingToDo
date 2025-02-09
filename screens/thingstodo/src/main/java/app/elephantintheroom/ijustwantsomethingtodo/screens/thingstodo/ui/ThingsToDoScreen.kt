@@ -3,8 +3,6 @@ package app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ui
 import androidx.activity.compose.BackHandler
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
-import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldDestinationItem
-import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.BackNavigationBehavior
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
@@ -18,6 +16,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ThingToDoViewModelProvider
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ExistingThingToDoListItem
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.NewThingToDoListItem
@@ -41,6 +40,7 @@ fun NavGraphBuilder.thingsToDoScreen(navController: NavController) {
             uiState,
             viewModel::addThingToDo,
             viewModel::startSpendingTime,
+            viewModel::stopSpendingTime,
         )
     }
 }
@@ -51,6 +51,7 @@ fun ThingsToDoScreen(
     uiState: ThingsToDoUiState,
     onAddNewThingToDo: (ThingToDo, (ThingToDo) -> Unit) -> Unit,
     onStartSpendingTime: (Long) -> Unit,
+    onStopSpendingTime: (TimeSpent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val navigator = rememberListDetailPaneScaffoldNavigator<ThingToDoListItem>()
@@ -65,7 +66,7 @@ fun ThingsToDoScreen(
     ThingsToDoListDetail(
         navigator.scaffoldDirective,
         navigator.scaffoldValue,
-        uiState.thingsToDo.map { ExistingThingToDoListItem(it.id!!, it.name) },
+        uiState.thingsToDo.map { ExistingThingToDoListItem(it.thingToDo, it.activeTimeSpent) },
         navigator.currentDestination?.content,
         onSelectItem = {
             coroutineScope.launch {
@@ -83,7 +84,7 @@ fun ThingsToDoScreen(
                     navigator.navigateBack(BackNavigationBehavior.PopLatest)
                     navigator.navigateTo(
                         ListDetailPaneScaffoldRole.Detail,
-                        ExistingThingToDoListItem(newThingToDo.id!!, newThingToDo.name),
+                        ExistingThingToDoListItem(newThingToDo, null),
                     )
                 }
             }
@@ -95,6 +96,7 @@ fun ThingsToDoScreen(
             }
         },
         onStartSpendingTime = onStartSpendingTime,
+        onStopSpendingTime = onStopSpendingTime,
         modifier,
     )
 }

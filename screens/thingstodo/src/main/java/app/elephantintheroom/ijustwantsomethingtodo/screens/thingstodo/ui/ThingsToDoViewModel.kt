@@ -3,6 +3,7 @@ package app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoIncludingActiveTimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.ThingToDoRepository
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.TimeSpentRepository
@@ -17,7 +18,7 @@ class ThingsToDoViewModel(
     private val thingToDoRepository: ThingToDoRepository,
     private val timeSpentRepository: TimeSpentRepository,
 ) : ViewModel() {
-    val uiState: StateFlow<ThingsToDoUiState> = thingToDoRepository.getAllThingsToDo().map {
+    val uiState: StateFlow<ThingsToDoUiState> = thingToDoRepository.getAllThingsToDoIncludingActiveTimeSpent().map {
         ThingsToDoUiState(it)
     }.stateIn(
         viewModelScope,
@@ -38,8 +39,14 @@ class ThingsToDoViewModel(
             timeSpentRepository.addTimeSpent(timeSpent)
         }
     }
+
+    fun stopSpendingTime(timeSpent: TimeSpent) {
+        viewModelScope.launch {
+            timeSpentRepository.addTimeSpent(timeSpent.copy(ended = Instant.now()))
+        }
+    }
 }
 
 data class ThingsToDoUiState(
-    val thingsToDo: List<ThingToDo>
+    val thingsToDo: List<ThingToDoIncludingActiveTimeSpent>
 )

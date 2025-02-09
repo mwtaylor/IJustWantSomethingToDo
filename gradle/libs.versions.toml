@@ -61,6 +61,7 @@ androidx-adaptive-navigation-android = { group = "androidx.compose.material3.ada
 core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtxVersion" }
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
+material-icons-extended = { group = "androidx.compose.material", name="material-icons-extended" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

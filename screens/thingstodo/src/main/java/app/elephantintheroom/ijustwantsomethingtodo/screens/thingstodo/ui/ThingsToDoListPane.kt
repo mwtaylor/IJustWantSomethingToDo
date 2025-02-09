@@ -1,10 +1,14 @@
 package app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -16,9 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.R
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ExistingThingToDoListItem
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ThingToDoListItem
+import java.time.Instant
 
 @Composable
 fun ThingsToDoListPane(
@@ -26,6 +33,7 @@ fun ThingsToDoListPane(
     onItemClick: (ThingToDoListItem) -> Unit,
     onNewThingToDoClick: () -> Unit,
     onStartSpendingTime: (ExistingThingToDoListItem) -> Unit,
+    onStopSpendingTime: (ExistingThingToDoListItem) -> Unit,
     modifier: Modifier = Modifier,
     expandFloatingAddButton: Boolean = false,
 ) {
@@ -46,10 +54,19 @@ fun ThingsToDoListPane(
                 for (thingToDoListItem in thingToDoListItems) {
                     ListItem(
                         headlineContent = {
-                            ThingToDoInList(
-                                thingToDoListItem,
-                                onStartSpendingTime,
-                            )
+                            if (thingToDoListItem.activeTimeSpent?.let {
+                                it.ended == null
+                            } == true) {
+                                RunningThingToDoInList(
+                                    thingToDoListItem,
+                                    onStopSpendingTime,
+                                )
+                            } else {
+                                PausedThingToDoInList(
+                                    thingToDoListItem,
+                                    onStartSpendingTime,
+                                )
+                            }
                         },
                         modifier = Modifier
                             .clickable {
@@ -65,22 +82,72 @@ fun ThingsToDoListPane(
 @Composable
 fun ThingToDoInList(
     thingToDoListItem: ExistingThingToDoListItem,
+    modifier: Modifier = Modifier,
+    iconButton: @Composable () -> Unit,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        IconButton(
+            onClick = {  }
+        ) {
+            Icon(
+                Icons.Default.CheckCircle,
+                stringResource(R.string.completeThingToDo, thingToDoListItem.thingToDo.name)
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(text = thingToDoListItem.thingToDo.name)
+            iconButton()
+        }
+    }
+}
+
+@Composable
+fun PausedThingToDoInList(
+    thingToDoListItem: ExistingThingToDoListItem,
     onStartSpendingTime: (ExistingThingToDoListItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
+    ThingToDoInList(
+        thingToDoListItem,
+        modifier,
     ) {
         IconButton(
             onClick = { onStartSpendingTime(thingToDoListItem) }
         ) {
             Icon(
                 Icons.Default.PlayArrow,
-                stringResource(R.string.startSpendingTime, thingToDoListItem.name)
+                stringResource(R.string.startSpendingTime, thingToDoListItem.thingToDo.name)
             )
         }
-        Text(text = thingToDoListItem.name)
+    }
+}
+
+@Composable
+fun RunningThingToDoInList(
+    thingToDoListItem: ExistingThingToDoListItem,
+    onStopSpendingTime: (ExistingThingToDoListItem) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    ThingToDoInList(
+        thingToDoListItem,
+        modifier,
+    ) {
+        IconButton(
+            onClick = { onStopSpendingTime(thingToDoListItem) }
+        ) {
+            Icon(
+                Icons.Default.Pause,
+                stringResource(R.string.stopSpendingTime, thingToDoListItem.thingToDo.name)
+            )
+        }
     }
 }
 
@@ -93,10 +160,20 @@ fun ThingToDoInList(
 fun ThingsToDoListPanePreview() {
     ThingsToDoListPane(
         thingToDoListItems = listOf(
-            ExistingThingToDoListItem(1, "fix bugs"),
-            ExistingThingToDoListItem(2, "submit code review"),
-            ExistingThingToDoListItem(3, "merge code"),
+            ExistingThingToDoListItem(
+                ThingToDo(1, "fix bugs"),
+                TimeSpent(1, 1, Instant.EPOCH, Instant.now()),
+            ),
+            ExistingThingToDoListItem(
+                ThingToDo(2, "submit code review"),
+                TimeSpent(2, 2, Instant.EPOCH, null),
+            ),
+            ExistingThingToDoListItem(
+                ThingToDo(3, "merge code"),
+                null,
+            ),
         ),
+        {},
         {},
         {},
         {},

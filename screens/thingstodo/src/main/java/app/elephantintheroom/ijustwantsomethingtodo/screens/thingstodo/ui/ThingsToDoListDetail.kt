@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ExistingThingToDoListItem
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.NewThingToDoListItem
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ThingToDoListItem
@@ -26,6 +27,7 @@ fun ThingsToDoListDetail(
     onAddNewThingToDo: (ThingToDo) -> Unit,
     onCancelNewThingToDo: () -> Unit,
     onStartSpendingTime: (Long) -> Unit,
+    onStopSpendingTime: (TimeSpent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ListDetailPaneScaffold(
@@ -38,7 +40,10 @@ fun ThingsToDoListDetail(
                     expandFloatingAddButton = scaffoldDirective.maxHorizontalPartitions > 1,
                     onItemClick = onSelectItem,
                     onNewThingToDoClick = onBeginNewThingToDo,
-                    onStartSpendingTime = { onStartSpendingTime(it.id) }
+                    onStartSpendingTime = { onStartSpendingTime(it.thingToDo.id!!) },
+                    onStopSpendingTime = { listItem ->
+                        listItem.activeTimeSpent?.let { onStopSpendingTime(it) }
+                    },
                 )
             }
         },
@@ -74,10 +79,20 @@ fun ThingToDoListDetailPreview() {
             PaneAdaptedValue.Hidden,
         ),
         listOf(
-            ExistingThingToDoListItem(1, "fix bugs"),
-            ExistingThingToDoListItem(2, "submit code review"),
+            ExistingThingToDoListItem(
+                ThingToDo(1, "fix bugs"),
+                null,
+            ),
+            ExistingThingToDoListItem(
+                ThingToDo(2, "submit code review"),
+                null,
+            ),
         ),
-        ExistingThingToDoListItem(1, "fix bugs"),
+        ExistingThingToDoListItem(
+            ThingToDo(1, "fix bugs"),
+            null,
+        ),
+        {},
         {},
         {},
         {},
