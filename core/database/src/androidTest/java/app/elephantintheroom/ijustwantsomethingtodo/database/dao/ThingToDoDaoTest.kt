@@ -93,4 +93,30 @@ internal class ThingToDoDaoTest : DatabaseTestBase() {
             thingToDoIncludingActiveTimeSpentEntities.map { it.activeTimeSpentEntity?.id },
         )
     }
+
+    @Test
+    fun testGetAllWithActiveTimeSpent() = runTest {
+        thingToDoDao.insert(listOf(
+            ThingToDoEntity(name = "first thing to do"),
+            ThingToDoEntity(name = "second thing to do"),
+            ThingToDoEntity(name = "third thing to do"),
+        ))
+
+        assertEquals(
+            emptyList(),
+            thingToDoDao.getAllWithActiveTimeSpent().first().map { it.thingToDoEntity.id },
+        )
+
+        timeSpentDao.record(
+            TimeSpentEntity(thingToDoId = 2, started = Instant.EPOCH)
+        )
+        timeSpentDao.record(
+            TimeSpentEntity(thingToDoId = 3, started = Instant.EPOCH, ended = Instant.now())
+        )
+
+        assertEquals(
+            listOf(2L),
+            thingToDoDao.getAllWithActiveTimeSpent().first().map { it.thingToDoEntity.id },
+        )
+    }
 }

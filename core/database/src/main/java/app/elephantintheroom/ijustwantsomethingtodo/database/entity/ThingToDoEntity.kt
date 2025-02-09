@@ -22,3 +22,10 @@ data class ThingToDoIncludingActiveTimeSpentEntity(
     @Embedded
     val activeTimeSpentEntity: TimeSpentEntity?
 )
+
+data class ThingToDoWithActiveTimeSpentEntity(
+    @Embedded
+    val thingToDoEntity: ThingToDoEntity,
+    @Embedded
+    val activeTimeSpentEntity: TimeSpentEntity
+)
