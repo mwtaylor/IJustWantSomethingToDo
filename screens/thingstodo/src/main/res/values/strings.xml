@@ -7,4 +7,5 @@
     <string name="startSpendingTime">Start spending time on %1$s</string>
     <string name="completeThingToDo">Complete thing to do %1$s</string>
     <string name="stopSpendingTime">Stop spending time on thing to do %1$s</string>
+    <string name="nameShouldNotBeBlank">Name is required</string>
 </resources>

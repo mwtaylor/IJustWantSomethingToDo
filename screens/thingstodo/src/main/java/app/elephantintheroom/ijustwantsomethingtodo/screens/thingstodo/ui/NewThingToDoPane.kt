@@ -48,8 +48,14 @@ fun NewThingToDoPane(
     modifier: Modifier = Modifier,
 ) {
     var name by remember { mutableStateOf("") }
+    var isValid by remember { mutableStateOf(true) }
     val saveUsingInput: () -> Unit = {
-        save(ThingToDo(null, name))
+        if (name.isNotBlank()) {
+            isValid = true
+            save(ThingToDo(null, name))
+        } else {
+            isValid = false
+        }
     }
 
     Scaffold(
@@ -101,6 +107,12 @@ fun NewThingToDoPane(
                 onValueChange = { name = it },
                 label = { Text("Name") },
                 singleLine = true,
+                isError = !isValid,
+                supportingText = {
+                    if (!isValid) {
+                        Text(text = stringResource(R.string.nameShouldNotBeBlank))
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(focusRequester),
