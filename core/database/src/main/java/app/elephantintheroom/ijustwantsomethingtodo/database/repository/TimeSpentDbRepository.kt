@@ -1,17 +1,15 @@
 package app.elephantintheroom.ijustwantsomethingtodo.database.repository
 
-import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.TimeSpentRepository
 import app.elephantintheroom.ijustwantsomethingtodo.database.dao.TimeSpentDao
-import app.elephantintheroom.ijustwantsomethingtodo.database.entity.ThingToDoEntity
 import app.elephantintheroom.ijustwantsomethingtodo.database.entity.TimeSpentEntity
 
 class TimeSpentDbRepository(
     private val timeSpentDao: TimeSpentDao,
 ) : TimeSpentRepository {
     override suspend fun addTimeSpent(timeSpent: TimeSpent): TimeSpent {
-        val id = timeSpentDao.insert(
+        val result = timeSpentDao.record(
             TimeSpentEntity(
                 timeSpent.id,
                 timeSpent.thingToDoId,
@@ -19,6 +17,7 @@ class TimeSpentDbRepository(
                 timeSpent.ended,
             )
         )
+        val id = timeSpent.id ?: result
         val newTimeSpentEntity = timeSpentDao.get(id)
         return newTimeSpentEntity.toModel()
     }
