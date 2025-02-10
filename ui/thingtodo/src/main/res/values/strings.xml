@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ui_thingtodo_completeThingToDo">Complete thing to do %1$s</string>
+    <string name="ui_thingtodo_startSpendingTime">Start spending time on thing to do %1$s</string>
+    <string name="ui_thingtodo_stopSpendingTime">Stop spending time on thing to do %1$s</string>
+</resources>

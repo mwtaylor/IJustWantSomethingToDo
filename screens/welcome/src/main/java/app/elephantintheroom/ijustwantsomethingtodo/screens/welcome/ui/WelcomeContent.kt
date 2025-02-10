@@ -15,6 +15,7 @@ import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoWithActiveTimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.R
+import app.elephantintheroom.ijustwantsomethingtodo.ui.thingtodo.ThingToDoCard
 import java.time.Instant
 
 @Composable
@@ -25,15 +26,9 @@ fun WelcomeContent(
     Column(modifier) {
         Text(text = stringResource(R.string.welcome))
         if (activeThingToDo != null) {
-            Card(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Row(
-                    modifier = Modifier.padding(10.dp)
-                ) {
-                    Text(text = activeThingToDo.thingToDo.name)
-                }
-            }
+            ThingToDoCard(
+                activeThingToDo.toOptionalActiveTimeSpent(),
+            )
         }
     }
 }

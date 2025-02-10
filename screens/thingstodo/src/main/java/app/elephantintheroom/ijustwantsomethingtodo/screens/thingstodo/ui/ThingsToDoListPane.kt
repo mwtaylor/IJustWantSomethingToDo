@@ -6,25 +6,20 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
-import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.R
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ExistingThingToDoListItem
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ThingToDoListItem
+import app.elephantintheroom.ijustwantsomethingtodo.ui.thingtodo.CompleteThingToDoButton
+import app.elephantintheroom.ijustwantsomethingtodo.ui.thingtodo.PauseThingToDoButton
+import app.elephantintheroom.ijustwantsomethingtodo.ui.thingtodo.StartThingToDoButton
 import java.time.Instant
 
 @Composable
@@ -90,14 +85,10 @@ fun ThingToDoInList(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        IconButton(
-            onClick = {  }
-        ) {
-            Icon(
-                Icons.Default.CheckCircle,
-                stringResource(R.string.completeThingToDo, thingToDoListItem.thingToDo.name)
-            )
-        }
+        CompleteThingToDoButton(
+            thingToDoListItem.thingToDo,
+            {},
+        )
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -119,14 +110,10 @@ fun PausedThingToDoInList(
         thingToDoListItem,
         modifier,
     ) {
-        IconButton(
+        StartThingToDoButton(
+            thingToDoListItem.thingToDo,
             onClick = { onStartSpendingTime(thingToDoListItem) }
-        ) {
-            Icon(
-                Icons.Default.PlayArrow,
-                stringResource(R.string.startSpendingTime, thingToDoListItem.thingToDo.name)
-            )
-        }
+        )
     }
 }
 
@@ -140,14 +127,10 @@ fun RunningThingToDoInList(
         thingToDoListItem,
         modifier,
     ) {
-        IconButton(
-            onClick = { onStopSpendingTime(thingToDoListItem) }
-        ) {
-            Icon(
-                Icons.Default.Pause,
-                stringResource(R.string.stopSpendingTime, thingToDoListItem.thingToDo.name)
-            )
-        }
+        PauseThingToDoButton(
+            thingToDoListItem.thingToDo,
+            onClick = { onStopSpendingTime(thingToDoListItem) },
+        )
     }
 }
 

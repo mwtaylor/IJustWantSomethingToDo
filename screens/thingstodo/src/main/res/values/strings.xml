@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="addThingToDo">Add a new thing to do</string>
-    <string name="newThingToDo">New Thing To Do</string>
-    <string name="cancelAddingNewThingToDo">Cancel adding a new thing to do</string>
-    <string name="saveNewThingToDo">Save the new thing to do</string>
-    <string name="startSpendingTime">Start spending time on %1$s</string>
-    <string name="completeThingToDo">Complete thing to do %1$s</string>
-    <string name="stopSpendingTime">Stop spending time on thing to do %1$s</string>
-    <string name="nameShouldNotBeBlank">Name is required</string>
+    <string name="screens_thingstodo_addThingToDo">Add a new thing to do</string>
+    <string name="screens_thingstodo_newThingToDo">New Thing To Do</string>
+    <string name="screens_thingstodo_cancelAddingNewThingToDo">Cancel adding a new thing to do</string>
+    <string name="screens_thingstodo_saveNewThingToDo">Save the new thing to do</string>
+    <string name="screens_thingstodo_nameShouldNotBeBlank">Name is required</string>
 </resources>

@@ -19,4 +19,8 @@ data class ThingToDoIncludingActiveTimeSpent(
 data class ThingToDoWithActiveTimeSpent(
     val thingToDo: ThingToDo,
     val activeTimeSpent: TimeSpent,
-) : Parcelable
+) : Parcelable {
+    fun toOptionalActiveTimeSpent(): ThingToDoIncludingActiveTimeSpent {
+        return ThingToDoIncludingActiveTimeSpent(thingToDo, activeTimeSpent)
+    }
+}

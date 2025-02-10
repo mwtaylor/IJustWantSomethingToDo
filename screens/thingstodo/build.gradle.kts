@@ -10,6 +10,6 @@ android {
 }
 dependencies {
     implementation(projects.core.data)
+    implementation(projects.ui.thingtodo)
     implementation(libs.androidx.adaptive.navigation.android)
-    implementation(libs.material.icons.extended)
 }

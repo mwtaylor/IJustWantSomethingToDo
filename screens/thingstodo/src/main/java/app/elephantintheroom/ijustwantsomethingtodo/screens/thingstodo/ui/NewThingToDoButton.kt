@@ -21,7 +21,7 @@ fun NewThingToDoButton(
         ExtendedFloatingActionButton(
             onClick = onClick,
             icon = { NewThingToDoButtonIcon() },
-            text = { Text(text = stringResource(R.string.addThingToDo)) },
+            text = { Text(text = stringResource(R.string.screens_thingstodo_addThingToDo)) },
             modifier = modifier,
         )
     } else {
@@ -36,5 +36,5 @@ fun NewThingToDoButton(
 
 @Composable
 fun NewThingToDoButtonIcon() {
-    Icon(Icons.Default.Add, stringResource(R.string.addThingToDo))
+    Icon(Icons.Default.Add, stringResource(R.string.screens_thingstodo_addThingToDo))
 }

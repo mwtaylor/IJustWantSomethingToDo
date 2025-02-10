@@ -89,12 +89,12 @@ fun NewThingToDoPane(
                 ) {
                     Icon(
                         Icons.Default.Close,
-                        stringResource(R.string.cancelAddingNewThingToDo)
+                        stringResource(R.string.screens_thingstodo_cancelAddingNewThingToDo)
                     )
                 }
 
                 Text(
-                    text = stringResource(R.string.newThingToDo),
+                    text = stringResource(R.string.screens_thingstodo_newThingToDo),
                     style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth(),
@@ -110,7 +110,7 @@ fun NewThingToDoPane(
                 isError = !isValid,
                 supportingText = {
                     if (!isValid) {
-                        Text(text = stringResource(R.string.nameShouldNotBeBlank))
+                        Text(text = stringResource(R.string.screens_thingstodo_nameShouldNotBeBlank))
                     }
                 },
                 modifier = Modifier
@@ -126,7 +126,7 @@ fun NewThingToDoPane(
             ) {
                 Icon(
                     Icons.Default.Done,
-                    stringResource(R.string.saveNewThingToDo)
+                    stringResource(R.string.screens_thingstodo_saveNewThingToDo)
                 )
             }
         }
