@@ -21,6 +21,9 @@ import java.time.Instant
 @Composable
 fun WelcomeContent(
     activeThingToDo: ThingToDoWithActiveTimeSpent?,
+    onThingToDoComplete: (ThingToDo) -> Unit,
+    onThingToDoStart: (ThingToDo) -> Unit,
+    onThingToDoPause: (ThingToDoWithActiveTimeSpent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
@@ -28,6 +31,9 @@ fun WelcomeContent(
         if (activeThingToDo != null) {
             ThingToDoCard(
                 activeThingToDo.toOptionalActiveTimeSpent(),
+                onComplete = { onThingToDoComplete(activeThingToDo.thingToDo) },
+                onStart = { onThingToDoStart(activeThingToDo.thingToDo) },
+                onPause = { onThingToDoPause(activeThingToDo) },
             )
         }
     }
@@ -44,6 +50,9 @@ fun WelcomeContentPreview() {
         ThingToDoWithActiveTimeSpent(
             ThingToDo(id = 1, "fix bugs"),
             TimeSpent(id = 1, thingToDoId = 1, Instant.EPOCH, null)
-        )
+        ),
+        {},
+        {},
+        {},
     )
 }

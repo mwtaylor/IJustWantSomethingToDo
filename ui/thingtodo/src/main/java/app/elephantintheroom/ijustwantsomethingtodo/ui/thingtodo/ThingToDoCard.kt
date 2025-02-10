@@ -19,6 +19,9 @@ import java.time.Instant
 @Composable
 fun ThingToDoCard(
     thingToDoIncludingActiveTimeSpent: ThingToDoIncludingActiveTimeSpent,
+    onComplete: () -> Unit,
+    onStart: () -> Unit,
+    onPause: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -44,12 +47,12 @@ fun ThingToDoCard(
             if (thingToDoIncludingActiveTimeSpent.activeTimeSpent == null) {
                 StartThingToDoButton(
                     thingToDoIncludingActiveTimeSpent.thingToDo,
-                    {},
+                    onStart,
                 )
             } else {
                 PauseThingToDoButton(
                     thingToDoIncludingActiveTimeSpent.thingToDo,
-                    {},
+                    onPause,
                 )
             }
         }
@@ -73,6 +76,9 @@ fun ThingToDoCardPreview() {
                 started = Instant.EPOCH,
                 ended = null,
             )
-        )
+        ),
+        {},
+        {},
+        {},
     )
 }

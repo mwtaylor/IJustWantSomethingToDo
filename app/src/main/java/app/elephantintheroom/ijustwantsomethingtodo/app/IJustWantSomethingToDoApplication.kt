@@ -12,8 +12,9 @@ import app.elephantintheroom.ijustwantsomethingtodo.database.repository.ThingToD
 import app.elephantintheroom.ijustwantsomethingtodo.database.repository.TimeSpentDbRepository
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ThingToDoApplication
 import app.elephantintheroom.ijustwantsomethingtodo.app.ui.AppViewModel
+import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.WelcomeApplication
 
-class IJustWantSomethingToDoApplication : Application(), ThingToDoApplication {
+class IJustWantSomethingToDoApplication : Application(), WelcomeApplication, ThingToDoApplication {
     override val thingToDoRepository: ThingToDoRepository by lazy {
         ThingToDoDbRepository(
             AppDatabase.getThingToDoDao(this),
