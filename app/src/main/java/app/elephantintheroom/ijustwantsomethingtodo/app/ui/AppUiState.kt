@@ -1,4 +1,4 @@
-package app.elephantintheroom.ijustwantsomethingtodo.ui
+package app.elephantintheroom.ijustwantsomethingtodo.app.ui
 
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel

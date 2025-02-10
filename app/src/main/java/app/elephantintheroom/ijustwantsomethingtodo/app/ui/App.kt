@@ -1,4 +1,4 @@
-package app.elephantintheroom.ijustwantsomethingtodo.ui
+package app.elephantintheroom.ijustwantsomethingtodo.app.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -15,10 +15,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import app.elephantintheroom.ijustwantsomethingtodo.navigation.AppDestinations
-import app.elephantintheroom.ijustwantsomethingtodo.ui.navigation.AppNavHost
-import app.elephantintheroom.ijustwantsomethingtodo.ui.navigation.AppNavigationSuiteScaffold
-import app.elephantintheroom.ijustwantsomethingtodo.ui.theme.IJustWantSomethingToDoTheme
+import app.elephantintheroom.ijustwantsomethingtodo.app.navigation.AppDestinations
+import app.elephantintheroom.ijustwantsomethingtodo.app.ui.navigation.AppNavHost
+import app.elephantintheroom.ijustwantsomethingtodo.app.ui.navigation.AppNavigationSuiteScaffold
+import app.elephantintheroom.ijustwantsomethingtodo.app.ui.theme.IJustWantSomethingToDoTheme
 
 @Composable
 fun App(

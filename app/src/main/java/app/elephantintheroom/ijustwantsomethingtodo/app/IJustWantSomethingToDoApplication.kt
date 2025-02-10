@@ -1,4 +1,4 @@
-package app.elephantintheroom.ijustwantsomethingtodo
+package app.elephantintheroom.ijustwantsomethingtodo.app
 
 import android.app.Application
 import androidx.lifecycle.ViewModelProvider
@@ -11,8 +11,7 @@ import app.elephantintheroom.ijustwantsomethingtodo.database.AppDatabase
 import app.elephantintheroom.ijustwantsomethingtodo.database.repository.ThingToDoDbRepository
 import app.elephantintheroom.ijustwantsomethingtodo.database.repository.TimeSpentDbRepository
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ThingToDoApplication
-import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.thingToDoApplication
-import app.elephantintheroom.ijustwantsomethingtodo.ui.AppViewModel
+import app.elephantintheroom.ijustwantsomethingtodo.app.ui.AppViewModel
 
 class IJustWantSomethingToDoApplication : Application(), ThingToDoApplication {
     override val thingToDoRepository: ThingToDoRepository by lazy {

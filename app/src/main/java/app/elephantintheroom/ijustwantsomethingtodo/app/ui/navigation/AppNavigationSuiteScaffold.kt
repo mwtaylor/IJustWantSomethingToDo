@@ -1,4 +1,4 @@
-package app.elephantintheroom.ijustwantsomethingtodo.ui.navigation
+package app.elephantintheroom.ijustwantsomethingtodo.app.ui.navigation
 
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScope

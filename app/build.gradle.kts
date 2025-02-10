@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "app.elephantintheroom.ijustwantsomethingtodo"
+    namespace = "app.elephantintheroom.ijustwantsomethingtodo.app"
 
     defaultConfig {
         applicationId = "app.elephantintheroom.ijustwantsomethingtodo"

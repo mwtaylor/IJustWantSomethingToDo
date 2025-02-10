@@ -1,4 +1,4 @@
-package app.elephantintheroom.ijustwantsomethingtodo.ui.theme
+package app.elephantintheroom.ijustwantsomethingtodo.app.ui.theme
 
 import android.app.Activity
 import android.os.Build

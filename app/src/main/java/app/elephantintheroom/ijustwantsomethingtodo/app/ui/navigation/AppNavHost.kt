@@ -1,4 +1,4 @@
-package app.elephantintheroom.ijustwantsomethingtodo.ui.navigation
+package app.elephantintheroom.ijustwantsomethingtodo.app.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,7 +9,7 @@ import app.elephantintheroom.ijustwantsomethingtodo.screens.reports.ui.reportsSc
 import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.navigation.WelcomeRoute
 import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.ui.welcomeScreen
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ui.thingsToDoScreen
-import app.elephantintheroom.ijustwantsomethingtodo.ui.AppUiState
+import app.elephantintheroom.ijustwantsomethingtodo.app.ui.AppUiState
 
 @Composable
 fun AppNavHost(

@@ -1,4 +1,4 @@
-package app.elephantintheroom.ijustwantsomethingtodo
+package app.elephantintheroom.ijustwantsomethingtodo.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,10 +11,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import app.elephantintheroom.ijustwantsomethingtodo.ui.App
-import app.elephantintheroom.ijustwantsomethingtodo.ui.AppUiState
-import app.elephantintheroom.ijustwantsomethingtodo.ui.AppViewModel
-import app.elephantintheroom.ijustwantsomethingtodo.ui.theme.IJustWantSomethingToDoTheme
+import app.elephantintheroom.ijustwantsomethingtodo.app.ui.App
+import app.elephantintheroom.ijustwantsomethingtodo.app.ui.AppUiState
+import app.elephantintheroom.ijustwantsomethingtodo.app.ui.AppViewModel
+import app.elephantintheroom.ijustwantsomethingtodo.app.ui.theme.IJustWantSomethingToDoTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

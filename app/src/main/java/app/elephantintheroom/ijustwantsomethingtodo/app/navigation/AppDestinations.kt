@@ -1,8 +1,8 @@
-package app.elephantintheroom.ijustwantsomethingtodo.navigation
+package app.elephantintheroom.ijustwantsomethingtodo.app.navigation
 
 import androidx.annotation.StringRes
 import androidx.navigation.NavController
-import app.elephantintheroom.ijustwantsomethingtodo.R
+import app.elephantintheroom.ijustwantsomethingtodo.app.R
 import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.navigation.WelcomeRoute
 import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.navigation.navigateToWelcome
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.navigation.ThingsToDoRoute

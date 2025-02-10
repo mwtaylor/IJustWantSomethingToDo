@@ -1,4 +1,4 @@
-package app.elephantintheroom.ijustwantsomethingtodo.ui.theme
+package app.elephantintheroom.ijustwantsomethingtodo.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
