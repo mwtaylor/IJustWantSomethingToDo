@@ -4,14 +4,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import app.elephantintheroom.ijustwantsomethingtodo.ui.App
 import app.elephantintheroom.ijustwantsomethingtodo.ui.AppUiState
-import app.elephantintheroom.ijustwantsomethingtodo.ui.rememberAppUiState
+import app.elephantintheroom.ijustwantsomethingtodo.ui.AppViewModel
 import app.elephantintheroom.ijustwantsomethingtodo.ui.theme.IJustWantSomethingToDoTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,17 +22,27 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val appUiState = rememberAppUiState()
+            val navController: NavHostController = rememberNavController()
+            val viewModel: AppViewModel = viewModel(factory = AppViewModelProvider.factory)
+            val uiState: AppUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-            ThemedScreen(appUiState)
+            ThemedScreen(
+                uiState,
+                navController = navController
+            )
         }
     }
 
     @Composable
-    fun ThemedScreen(appUiState: AppUiState, modifier: Modifier = Modifier) {
+    fun ThemedScreen(
+        appUiState: AppUiState,
+        navController: NavHostController,
+        modifier: Modifier = Modifier,
+    ) {
         IJustWantSomethingToDoTheme {
             App(
                 appUiState,
+                navController,
                 modifier = modifier
             )
         }

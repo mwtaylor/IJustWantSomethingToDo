@@ -2,10 +2,12 @@ package app.elephantintheroom.ijustwantsomethingtodo.database.repository
 
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoIncludingActiveTimeSpent
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoWithActiveTimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.ThingToDoRepository
 import app.elephantintheroom.ijustwantsomethingtodo.database.dao.ThingToDoDao
 import app.elephantintheroom.ijustwantsomethingtodo.database.entity.ThingToDoEntity
 import app.elephantintheroom.ijustwantsomethingtodo.database.entity.ThingToDoIncludingActiveTimeSpentEntity
+import app.elephantintheroom.ijustwantsomethingtodo.database.entity.ThingToDoWithActiveTimeSpentEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -23,6 +25,11 @@ class ThingToDoDbRepository(
             allThingToDoIncludingActiveTimeSpentEntities.map { it.toModel() }
         }
 
+    override fun getAllThingsToDoWithActiveTimeSpent(): Flow<List<ThingToDoWithActiveTimeSpent>> =
+        thingToDoDao.getAllWithActiveTimeSpent().map { allThingToDoWithActiveTimeSpentEntities ->
+            allThingToDoWithActiveTimeSpentEntities.map { it.toModel() }
+        }
+
     override suspend fun addThingToDo(thingToDo: ThingToDo): ThingToDo {
         val id = thingToDoDao.insert(ThingToDoEntity(null, thingToDo.name))
         return thingToDoDao.get(id).toModel()
@@ -37,5 +44,12 @@ fun ThingToDoIncludingActiveTimeSpentEntity.toModel(): ThingToDoIncludingActiveT
     return ThingToDoIncludingActiveTimeSpent(
         thingToDoEntity.toModel(),
         activeTimeSpentEntity?.toModel(),
+    )
+}
+
+fun ThingToDoWithActiveTimeSpentEntity.toModel(): ThingToDoWithActiveTimeSpent {
+    return ThingToDoWithActiveTimeSpent(
+        thingToDoEntity.toModel(),
+        activeTimeSpentEntity.toModel(),
     )
 }

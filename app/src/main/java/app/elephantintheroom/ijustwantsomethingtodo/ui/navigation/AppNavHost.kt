@@ -2,6 +2,7 @@ package app.elephantintheroom.ijustwantsomethingtodo.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import app.elephantintheroom.ijustwantsomethingtodo.screens.planning.ui.planningScreen
 import app.elephantintheroom.ijustwantsomethingtodo.screens.reports.ui.reportsScreen
@@ -12,16 +13,16 @@ import app.elephantintheroom.ijustwantsomethingtodo.ui.AppUiState
 
 @Composable
 fun AppNavHost(
-    appUiState: AppUiState,
+    navController: NavHostController,
+    uiState: AppUiState,
     modifier: Modifier = Modifier,
 ) {
-    val navController = appUiState.navController
     NavHost(
         navController = navController,
         startDestination = WelcomeRoute,
         modifier = modifier,
     ) {
-        welcomeScreen()
+        welcomeScreen(navController, uiState.activeThingToDo)
         thingsToDoScreen(navController)
         planningScreen()
         reportsScreen()

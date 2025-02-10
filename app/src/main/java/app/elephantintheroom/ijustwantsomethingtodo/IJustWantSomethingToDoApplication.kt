@@ -1,12 +1,18 @@
 package app.elephantintheroom.ijustwantsomethingtodo
 
 import android.app.Application
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.ThingToDoRepository
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.TimeSpentRepository
 import app.elephantintheroom.ijustwantsomethingtodo.database.AppDatabase
 import app.elephantintheroom.ijustwantsomethingtodo.database.repository.ThingToDoDbRepository
 import app.elephantintheroom.ijustwantsomethingtodo.database.repository.TimeSpentDbRepository
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ThingToDoApplication
+import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.thingToDoApplication
+import app.elephantintheroom.ijustwantsomethingtodo.ui.AppViewModel
 
 class IJustWantSomethingToDoApplication : Application(), ThingToDoApplication {
     override val thingToDoRepository: ThingToDoRepository by lazy {
@@ -21,3 +27,16 @@ class IJustWantSomethingToDoApplication : Application(), ThingToDoApplication {
         )
     }
 }
+
+object AppViewModelProvider {
+    val factory = viewModelFactory {
+        initializer {
+            AppViewModel(
+                application().thingToDoRepository,
+            )
+        }
+    }
+}
+
+fun CreationExtras.application(): IJustWantSomethingToDoApplication =
+    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as IJustWantSomethingToDoApplication)

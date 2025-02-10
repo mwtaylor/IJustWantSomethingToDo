@@ -8,3 +8,15 @@ data class ThingToDo(
     val id: Long?,
     val name: String,
 ) : Parcelable
+
+@Parcelize
+data class ThingToDoIncludingActiveTimeSpent(
+    val thingToDo: ThingToDo,
+    val activeTimeSpent: TimeSpent?,
+) : Parcelable
+
+@Parcelize
+data class ThingToDoWithActiveTimeSpent(
+    val thingToDo: ThingToDo,
+    val activeTimeSpent: TimeSpent,
+) : Parcelable

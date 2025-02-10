@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import app.elephantintheroom.ijustwantsomethingtodo.navigation.AppDestinations
 import app.elephantintheroom.ijustwantsomethingtodo.ui.navigation.AppNavHost
@@ -21,7 +22,8 @@ import app.elephantintheroom.ijustwantsomethingtodo.ui.theme.IJustWantSomethingT
 
 @Composable
 fun App(
-    appUiState: AppUiState,
+    uiState: AppUiState,
+    navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
     AppNavigationSuiteScaffold(
@@ -36,7 +38,7 @@ fun App(
                     },
                     label = { Text(stringResource(it.label)) },
                     selected = false,
-                    onClick = { it.onClick(appUiState.navController) },
+                    onClick = { it.onClick(navController) },
                 )
             }
         },
@@ -50,7 +52,7 @@ fun App(
                     .padding(innerPadding)
                     .consumeWindowInsets(innerPadding)
             ) {
-                AppNavHost(appUiState)
+                AppNavHost(navController, uiState)
             }
         }
     }
@@ -61,7 +63,11 @@ fun App(
 fun AppPreview() {
     IJustWantSomethingToDoTheme {
         App(
-            AppUiState(rememberNavController()),
+            AppUiState(
+                false,
+                null,
+            ),
+            rememberNavController(),
         )
     }
 }
