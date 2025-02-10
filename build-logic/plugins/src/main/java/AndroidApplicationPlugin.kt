@@ -15,8 +15,8 @@ class AndroidApplicationPlugin : Plugin<Project> {
 
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.minSdk = 35
-                defaultConfig.targetSdk = 35
+                defaultConfig.minSdk = 34
+                defaultConfig.targetSdk = 34
             }
 
             dependencies {

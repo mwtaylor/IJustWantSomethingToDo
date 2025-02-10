@@ -15,8 +15,8 @@ class AndroidLibraryPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.minSdk = 35
-                defaultConfig.targetSdk = 35
+                defaultConfig.minSdk = 34
+                defaultConfig.targetSdk = 34
                 defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 // The resource prefix is derived from the module name,
                 // so resources inside ":core:module1" must be prefixed with "core_module1_"
