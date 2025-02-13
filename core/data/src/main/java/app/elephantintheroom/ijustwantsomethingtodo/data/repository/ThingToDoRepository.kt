@@ -2,7 +2,7 @@ package app.elephantintheroom.ijustwantsomethingtodo.data.repository
 
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoIncludingActiveTimeSpent
-import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoWithActiveTimeSpent
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
 import kotlinx.coroutines.flow.Flow
 
 interface ThingToDoRepository {
@@ -10,7 +10,7 @@ interface ThingToDoRepository {
 
     fun getAllThingsToDoIncludingActiveTimeSpent(): Flow<List<ThingToDoIncludingActiveTimeSpent>>
 
-    fun getAllThingsToDoWithActiveTimeSpent(): Flow<List<ThingToDoWithActiveTimeSpent>>
+    fun getAllActiveThingsToDo(): Flow<List<ActiveThingToDo>>
 
     suspend fun addThingToDo(thingToDo: ThingToDo): ThingToDo
 }

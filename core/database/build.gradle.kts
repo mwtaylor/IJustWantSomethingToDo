@@ -10,6 +10,7 @@ android {
 dependencies {
     annotationProcessor(libs.androidx.room.compiler)
     implementation(projects.core.data)
+    api(projects.core.domain.common)
     androidTestImplementation(libs.junit)
     androidTestImplementation(libs.kotlin.test)
 }

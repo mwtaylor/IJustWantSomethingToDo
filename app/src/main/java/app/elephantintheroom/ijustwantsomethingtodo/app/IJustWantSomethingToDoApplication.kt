@@ -12,6 +12,7 @@ import app.elephantintheroom.ijustwantsomethingtodo.database.repository.ThingToD
 import app.elephantintheroom.ijustwantsomethingtodo.database.repository.TimeSpentDbRepository
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ThingToDoApplication
 import app.elephantintheroom.ijustwantsomethingtodo.app.ui.AppViewModel
+import app.elephantintheroom.ijustwantsomethingtodo.core.domain.activethingtodo.OneActiveThingToDoUseCase
 import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.WelcomeApplication
 
 class IJustWantSomethingToDoApplication : Application(), WelcomeApplication, ThingToDoApplication {
@@ -24,6 +25,14 @@ class IJustWantSomethingToDoApplication : Application(), WelcomeApplication, Thi
     override val timeSpentRepository: TimeSpentRepository by lazy {
         TimeSpentDbRepository(
             AppDatabase.getTimeSpentDao(this)
+        )
+    }
+
+    override val oneActiveThingToDoUseCase: OneActiveThingToDoUseCase by lazy {
+        OneActiveThingToDoUseCase(
+            thingToDoRepository,
+            timeSpentRepository,
+            AppDatabase.getTransactionProvider(this),
         )
     }
 }

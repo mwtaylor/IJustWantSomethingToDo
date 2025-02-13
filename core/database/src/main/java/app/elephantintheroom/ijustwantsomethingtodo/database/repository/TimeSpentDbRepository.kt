@@ -8,8 +8,8 @@ import app.elephantintheroom.ijustwantsomethingtodo.database.entity.TimeSpentEnt
 class TimeSpentDbRepository(
     private val timeSpentDao: TimeSpentDao,
 ) : TimeSpentRepository {
-    override suspend fun addTimeSpent(timeSpent: TimeSpent): TimeSpent {
-        val result = timeSpentDao.record(
+    override suspend fun recordTimeSpent(timeSpent: TimeSpent): TimeSpent {
+        val upsertResult = timeSpentDao.upsert(
             TimeSpentEntity(
                 timeSpent.id,
                 timeSpent.thingToDoId,
@@ -17,9 +17,11 @@ class TimeSpentDbRepository(
                 timeSpent.ended,
             )
         )
-        val id = timeSpent.id ?: result
-        val newTimeSpentEntity = timeSpentDao.get(id)
-        return newTimeSpentEntity.toModel()
+
+        val id = timeSpent.id ?: upsertResult
+        val resultTimeSpentEntity = timeSpentDao.get(id)
+
+        return resultTimeSpentEntity.toModel()
     }
 }
 

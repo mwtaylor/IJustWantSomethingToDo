@@ -50,7 +50,7 @@ fun NavGraphBuilder.thingsToDoScreen(navController: NavController) {
 fun ThingsToDoScreen(
     uiState: ThingsToDoUiState,
     onAddNewThingToDo: (ThingToDo, (ThingToDo) -> Unit) -> Unit,
-    onStartSpendingTime: (Long) -> Unit,
+    onStartSpendingTime: (ThingToDo) -> Unit,
     onStopSpendingTime: (TimeSpent) -> Unit,
     modifier: Modifier = Modifier,
 ) {

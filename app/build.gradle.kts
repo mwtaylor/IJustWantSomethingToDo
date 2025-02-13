@@ -34,6 +34,7 @@ dependencies {
     implementation(projects.screens.reports)
     implementation(projects.core.database)
     implementation(projects.core.data)
+    implementation(projects.core.domain.activethingtodo)
     implementation(libs.androidx.compose.material3.adaptive.navigation.suite.android)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)

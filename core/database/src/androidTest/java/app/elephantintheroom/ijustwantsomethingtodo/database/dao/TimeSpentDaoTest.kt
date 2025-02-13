@@ -7,6 +7,7 @@ import kotlinx.coroutines.test.runTest
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 internal class TimeSpentDaoTest : DatabaseTestBase() {
@@ -16,41 +17,22 @@ internal class TimeSpentDaoTest : DatabaseTestBase() {
             ThingToDoEntity(name = "")
         )
 
-        val id = timeSpentDao.record(
-            TimeSpentEntity(thingToDoId = 1, started = Instant.now())
+        val newTimeSpentEntityId = timeSpentDao.upsert(
+            TimeSpentEntity(thingToDoId = 1, started = Instant.EPOCH)
         )
         assertEquals(
             1,
-            id,
+            newTimeSpentEntityId,
         )
 
-        val timeSpentEntity = timeSpentDao.get(id)
+        val timeSpentEntity = timeSpentDao.get(1)
         assertEquals(
             1,
             timeSpentEntity.id,
         )
-    }
-
-    @Test
-    fun testInsertAndRetrieveActiveThingToDo() = runTest {
-        thingToDoDao.insert(
-            ThingToDoEntity(name = "")
-        )
-
-        timeSpentDao.record(
-            TimeSpentEntity(thingToDoId = 1, started = Instant.now(), ended = Instant.now())
-        )
-        timeSpentDao.record(
-            TimeSpentEntity(thingToDoId = 1, started = Instant.now())
-        )
-
         assertEquals(
-            2L,
-            timeSpentDao.getActiveForThingToDo(1L)?.id,
-        )
-
-        assertNull(
-            timeSpentDao.getActiveForThingToDo(1L)?.ended,
+            0,
+            timeSpentEntity.started.epochSecond,
         )
     }
 
@@ -60,24 +42,32 @@ internal class TimeSpentDaoTest : DatabaseTestBase() {
             ThingToDoEntity(name = "")
         )
 
-        timeSpentDao.record(
-            TimeSpentEntity(
-                id = 1,
-                thingToDoId = 1,
-                started = Instant.EPOCH,
-            )
-        )
-        timeSpentDao.record(
-            TimeSpentEntity(
-                id = 1,
-                thingToDoId = 1,
-                started = Instant.EPOCH,
-                ended = Instant.ofEpochSecond(1)
+        assertEquals(
+            1,
+            timeSpentDao.upsert(
+                TimeSpentEntity(
+                    id = 1,
+                    thingToDoId = 1,
+                    started = Instant.EPOCH,
+                )
             )
         )
 
-        assertNull(
-            timeSpentDao.getActiveForThingToDo(1)
+        assertEquals(
+            -1,
+            timeSpentDao.upsert(
+                TimeSpentEntity(
+                    id = 1,
+                    thingToDoId = 1,
+                    started = Instant.EPOCH,
+                    ended = Instant.ofEpochSecond(1)
+                )
+            )
+        )
+
+        assertEquals(
+            1L,
+            timeSpentDao.get(1).ended?.epochSecond,
         )
     }
 }

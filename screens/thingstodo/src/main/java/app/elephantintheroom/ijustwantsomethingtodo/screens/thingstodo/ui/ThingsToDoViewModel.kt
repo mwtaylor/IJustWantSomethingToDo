@@ -2,6 +2,7 @@ package app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.elephantintheroom.ijustwantsomethingtodo.core.domain.activethingtodo.OneActiveThingToDoUseCase
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoIncludingActiveTimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
@@ -17,6 +18,7 @@ import java.time.Instant
 class ThingsToDoViewModel(
     private val thingToDoRepository: ThingToDoRepository,
     private val timeSpentRepository: TimeSpentRepository,
+    private val oneActiveThingToDoUseCase: OneActiveThingToDoUseCase,
 ) : ViewModel() {
     val uiState: StateFlow<ThingsToDoUiState> = thingToDoRepository.getAllThingsToDoIncludingActiveTimeSpent().map {
         ThingsToDoUiState(it)
@@ -33,16 +35,15 @@ class ThingsToDoViewModel(
         }
     }
 
-    fun startSpendingTime(thingToDoId: Long) {
-        val timeSpent = TimeSpent(null, thingToDoId, Instant.now(), null)
+    fun startSpendingTime(thingToDo: ThingToDo) {
         viewModelScope.launch {
-            timeSpentRepository.addTimeSpent(timeSpent)
+            oneActiveThingToDoUseCase.startThingToDo(thingToDo) { false }
         }
     }
 
     fun stopSpendingTime(timeSpent: TimeSpent) {
         viewModelScope.launch {
-            timeSpentRepository.addTimeSpent(timeSpent.copy(ended = Instant.now()))
+            timeSpentRepository.recordTimeSpent(timeSpent.copy(ended = Instant.now()))
         }
     }
 }

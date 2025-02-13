@@ -3,7 +3,7 @@ package app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
-import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoWithActiveTimeSpent
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.TimeSpentRepository
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,19 +29,19 @@ class WelcomeViewModel(
     fun startThingToDo(thingToDo: ThingToDo) {
         val timeSpent = TimeSpent(null, thingToDo.id!!, Instant.now(), null)
         viewModelScope.launch {
-            timeSpentRepository.addTimeSpent(timeSpent)
+            timeSpentRepository.recordTimeSpent(timeSpent)
         }
     }
 
-    fun pauseThingToDo(thingToDoWithActiveTimeSpent: ThingToDoWithActiveTimeSpent) {
+    fun pauseThingToDo(activeThingToDo: ActiveThingToDo) {
         val timeSpent = TimeSpent(
-            thingToDoWithActiveTimeSpent.activeTimeSpent.id,
-            thingToDoWithActiveTimeSpent.activeTimeSpent.thingToDoId,
-            thingToDoWithActiveTimeSpent.activeTimeSpent.started,
+            activeThingToDo.activeTimeSpent.id,
+            activeThingToDo.activeTimeSpent.thingToDoId,
+            activeThingToDo.activeTimeSpent.started,
             Instant.now(),
         )
         viewModelScope.launch {
-            timeSpentRepository.addTimeSpent(timeSpent)
+            timeSpentRepository.recordTimeSpent(timeSpent)
         }
     }
 }

@@ -26,7 +26,7 @@ fun ThingsToDoListDetail(
     onBeginNewThingToDo: () -> Unit,
     onAddNewThingToDo: (ThingToDo) -> Unit,
     onCancelNewThingToDo: () -> Unit,
-    onStartSpendingTime: (Long) -> Unit,
+    onStartSpendingTime: (ThingToDo) -> Unit,
     onStopSpendingTime: (TimeSpent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -40,7 +40,7 @@ fun ThingsToDoListDetail(
                     expandFloatingAddButton = scaffoldDirective.maxHorizontalPartitions > 1,
                     onItemClick = onSelectItem,
                     onNewThingToDoClick = onBeginNewThingToDo,
-                    onStartSpendingTime = { onStartSpendingTime(it.thingToDo.id!!) },
+                    onStartSpendingTime = { onStartSpendingTime(it.thingToDo) },
                     onStopSpendingTime = { listItem ->
                         listItem.activeTimeSpent?.let { onStopSpendingTime(it) }
                     },

@@ -75,10 +75,10 @@ internal class ThingToDoDaoTest : DatabaseTestBase() {
             ThingToDoEntity(name = "second thing to do"),
             ThingToDoEntity(name = "third thing to do"),
         ))
-        timeSpentDao.record(
+        timeSpentDao.upsert(
             TimeSpentEntity(thingToDoId = 2, started = Instant.EPOCH)
         )
-        timeSpentDao.record(
+        timeSpentDao.upsert(
             TimeSpentEntity(thingToDoId = 3, started = Instant.EPOCH, ended = Instant.now())
         )
 
@@ -107,10 +107,10 @@ internal class ThingToDoDaoTest : DatabaseTestBase() {
             thingToDoDao.getAllWithActiveTimeSpent().first().map { it.thingToDoEntity.id },
         )
 
-        timeSpentDao.record(
+        timeSpentDao.upsert(
             TimeSpentEntity(thingToDoId = 2, started = Instant.EPOCH)
         )
-        timeSpentDao.record(
+        timeSpentDao.upsert(
             TimeSpentEntity(thingToDoId = 3, started = Instant.EPOCH, ended = Instant.now())
         )
 

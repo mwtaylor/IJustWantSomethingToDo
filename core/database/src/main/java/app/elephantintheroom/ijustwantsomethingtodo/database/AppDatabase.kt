@@ -37,12 +37,13 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        fun getThingToDoDao(context: Context): ThingToDoDao {
-            return getDatabase(context).thingToDoDao()
-        }
+        fun getThingToDoDao(context: Context): ThingToDoDao =
+            getDatabase(context).thingToDoDao()
 
-        fun getTimeSpentDao(context: Context): TimeSpentDao {
-            return getDatabase(context).timeSpentDao()
-        }
+        fun getTimeSpentDao(context: Context): TimeSpentDao =
+            getDatabase(context).timeSpentDao()
+
+        fun getTransactionProvider(context: Context): DbTransactionProvider =
+            DbTransactionProvider(getDatabase(context))
     }
 }

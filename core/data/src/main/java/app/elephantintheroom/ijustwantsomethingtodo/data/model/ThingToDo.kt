@@ -16,7 +16,7 @@ data class ThingToDoIncludingActiveTimeSpent(
 ) : Parcelable
 
 @Parcelize
-data class ThingToDoWithActiveTimeSpent(
+data class ActiveThingToDo(
     val thingToDo: ThingToDo,
     val activeTimeSpent: TimeSpent,
 ) : Parcelable {

@@ -2,7 +2,7 @@ package app.elephantintheroom.ijustwantsomethingtodo.database.repository
 
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoIncludingActiveTimeSpent
-import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoWithActiveTimeSpent
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.ThingToDoRepository
 import app.elephantintheroom.ijustwantsomethingtodo.database.dao.ThingToDoDao
 import app.elephantintheroom.ijustwantsomethingtodo.database.entity.ThingToDoEntity
@@ -25,7 +25,7 @@ class ThingToDoDbRepository(
             allThingToDoIncludingActiveTimeSpentEntities.map { it.toModel() }
         }
 
-    override fun getAllThingsToDoWithActiveTimeSpent(): Flow<List<ThingToDoWithActiveTimeSpent>> =
+    override fun getAllActiveThingsToDo(): Flow<List<ActiveThingToDo>> =
         thingToDoDao.getAllWithActiveTimeSpent().map { allThingToDoWithActiveTimeSpentEntities ->
             allThingToDoWithActiveTimeSpentEntities.map { it.toModel() }
         }
@@ -47,8 +47,8 @@ fun ThingToDoIncludingActiveTimeSpentEntity.toModel(): ThingToDoIncludingActiveT
     )
 }
 
-fun ThingToDoWithActiveTimeSpentEntity.toModel(): ThingToDoWithActiveTimeSpent {
-    return ThingToDoWithActiveTimeSpent(
+fun ThingToDoWithActiveTimeSpentEntity.toModel(): ActiveThingToDo {
+    return ActiveThingToDo(
         thingToDoEntity.toModel(),
         activeTimeSpentEntity.toModel(),
     )

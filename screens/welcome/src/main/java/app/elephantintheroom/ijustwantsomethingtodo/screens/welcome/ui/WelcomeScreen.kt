@@ -13,13 +13,13 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
-import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoWithActiveTimeSpent
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.WelcomeViewModelProvider
 import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.navigation.WelcomeRoute
 
 fun NavGraphBuilder.welcomeScreen(
     navController: NavController,
-    activeThingToDo: ThingToDoWithActiveTimeSpent?,
+    activeThingToDo: ActiveThingToDo?,
 ) {
     composable<WelcomeRoute> { backStackEntry ->
         val baseEntry = remember(backStackEntry) {
@@ -45,10 +45,10 @@ fun NavGraphBuilder.welcomeScreen(
 @Composable
 fun WelcomeScreen(
     uiState: WelcomeUiState,
-    activeThingToDo: ThingToDoWithActiveTimeSpent?,
+    activeThingToDo: ActiveThingToDo?,
     onThingToDoComplete: (ThingToDo) -> Unit,
     onThingToDoStart: (ThingToDo) -> Unit,
-    onThingToDoPause: (ThingToDoWithActiveTimeSpent) -> Unit,
+    onThingToDoPause: (ActiveThingToDo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(

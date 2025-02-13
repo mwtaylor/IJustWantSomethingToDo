@@ -10,6 +10,7 @@ android {
 }
 dependencies {
     implementation(projects.core.data)
+    implementation(projects.core.domain.activethingtodo)
     implementation(projects.ui.thingtodo)
     implementation(libs.androidx.adaptive.navigation.android)
 }
