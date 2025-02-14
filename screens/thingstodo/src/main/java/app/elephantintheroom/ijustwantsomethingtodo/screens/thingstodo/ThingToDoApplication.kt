@@ -8,11 +8,13 @@ import app.elephantintheroom.ijustwantsomethingtodo.core.domain.activethingtodo.
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.ThingToDoRepository
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.TimeSpentRepository
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ui.ThingsToDoViewModel
+import java.time.Clock
 
 interface ThingToDoApplication {
     val thingToDoRepository: ThingToDoRepository
     val timeSpentRepository: TimeSpentRepository
     val oneActiveThingToDoUseCase: OneActiveThingToDoUseCase
+    val clock: Clock
 }
 
 object ThingToDoViewModelProvider {
@@ -22,6 +24,7 @@ object ThingToDoViewModelProvider {
                 thingToDoApplication().thingToDoRepository,
                 thingToDoApplication().timeSpentRepository,
                 thingToDoApplication().oneActiveThingToDoUseCase,
+                thingToDoApplication().clock,
             )
         }
     }

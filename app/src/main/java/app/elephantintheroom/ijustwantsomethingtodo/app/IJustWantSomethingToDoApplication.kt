@@ -14,6 +14,7 @@ import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.app.ui.AppViewModel
 import app.elephantintheroom.ijustwantsomethingtodo.core.domain.activethingtodo.OneActiveThingToDoUseCase
 import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.WelcomeApplication
+import java.time.Clock
 
 class IJustWantSomethingToDoApplication : Application(), WelcomeApplication, ThingToDoApplication {
     override val thingToDoRepository: ThingToDoRepository by lazy {
@@ -28,11 +29,14 @@ class IJustWantSomethingToDoApplication : Application(), WelcomeApplication, Thi
         )
     }
 
+    override val clock: Clock = Clock.systemDefaultZone()
+
     override val oneActiveThingToDoUseCase: OneActiveThingToDoUseCase by lazy {
         OneActiveThingToDoUseCase(
             thingToDoRepository,
             timeSpentRepository,
             AppDatabase.getTransactionProvider(this),
+            clock,
         )
     }
 }

@@ -13,12 +13,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.Clock
 import java.time.Instant
 
 class ThingsToDoViewModel(
     private val thingToDoRepository: ThingToDoRepository,
     private val timeSpentRepository: TimeSpentRepository,
     private val oneActiveThingToDoUseCase: OneActiveThingToDoUseCase,
+    private val clock: Clock,
 ) : ViewModel() {
     val uiState: StateFlow<ThingsToDoUiState> = thingToDoRepository.getAllThingsToDoIncludingActiveTimeSpent().map {
         ThingsToDoUiState(it)
@@ -43,7 +45,7 @@ class ThingsToDoViewModel(
 
     fun stopSpendingTime(timeSpent: TimeSpent) {
         viewModelScope.launch {
-            timeSpentRepository.recordTimeSpent(timeSpent.copy(ended = Instant.now()))
+            timeSpentRepository.recordTimeSpent(timeSpent.copy(ended = Instant.now(clock)))
         }
     }
 }

@@ -7,6 +7,7 @@ plugins {
 dependencies {
     implementation(projects.core.data)
     implementation(projects.ui.thingtodo)
+    implementation(projects.core.domain.activethingtodo)
 }
 
 android {
