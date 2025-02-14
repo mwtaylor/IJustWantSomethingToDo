@@ -25,7 +25,7 @@ fun WelcomeContent(
         Text(text = stringResource(R.string.welcome))
         if (activeThingToDo != null) {
             ThingToDoCard(
-                activeThingToDo.toOptionalActiveTimeSpent(),
+                activeThingToDo,
                 onComplete = { onThingToDoComplete(activeThingToDo.thingToDo) },
                 onStart = { onThingToDoStart(activeThingToDo.thingToDo) },
                 onPause = { onThingToDoPause(activeThingToDo) },
@@ -44,7 +44,8 @@ fun WelcomeContentPreview() {
     WelcomeContent(
         ActiveThingToDo(
             ThingToDo(id = 1, "fix bugs"),
-            TimeSpent(id = 1, thingToDoId = 1, Instant.EPOCH, null)
+            TimeSpent(id = 1, thingToDoId = 1, Instant.EPOCH, null),
+            emptyList(),
         ),
         {},
         {},

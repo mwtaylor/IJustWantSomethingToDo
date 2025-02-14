@@ -11,14 +11,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
-import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoIncludingActiveTimeSpent
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoWithTimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import java.time.Instant
 
 @Composable
 fun ThingToDoCard(
-    thingToDoIncludingActiveTimeSpent: ThingToDoIncludingActiveTimeSpent,
+    thingToDoWithTimeSpent: ThingToDoWithTimeSpent,
     onComplete: () -> Unit,
     onStart: () -> Unit,
     onPause: () -> Unit,
@@ -38,21 +39,21 @@ fun ThingToDoCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 CompleteThingToDoButton(
-                    thingToDoIncludingActiveTimeSpent.thingToDo,
-                    {},
+                    thingToDoWithTimeSpent.thingToDo,
+                    onComplete,
                 )
-                Text(text = thingToDoIncludingActiveTimeSpent.thingToDo.name)
+                Text(text = thingToDoWithTimeSpent.thingToDo.name)
             }
 
-            if (thingToDoIncludingActiveTimeSpent.activeTimeSpent == null) {
-                StartThingToDoButton(
-                    thingToDoIncludingActiveTimeSpent.thingToDo,
-                    onStart,
+            if (thingToDoWithTimeSpent is ActiveThingToDo) {
+                PauseThingToDoButton(
+                    thingToDoWithTimeSpent.thingToDo,
+                    onPause,
                 )
             } else {
-                PauseThingToDoButton(
-                    thingToDoIncludingActiveTimeSpent.thingToDo,
-                    onPause,
+                StartThingToDoButton(
+                    thingToDoWithTimeSpent.thingToDo,
+                    onStart,
                 )
             }
         }
@@ -65,7 +66,7 @@ fun ThingToDoCard(
 @Composable
 fun ThingToDoCardPreview() {
     ThingToDoCard(
-        ThingToDoIncludingActiveTimeSpent(
+        ActiveThingToDo(
             ThingToDo(
                 id = 1,
                 name = "fix bugs",
@@ -75,7 +76,8 @@ fun ThingToDoCardPreview() {
                 thingToDoId = 1,
                 started = Instant.EPOCH,
                 ended = null,
-            )
+            ),
+            emptyList(),
         ),
         {},
         {},

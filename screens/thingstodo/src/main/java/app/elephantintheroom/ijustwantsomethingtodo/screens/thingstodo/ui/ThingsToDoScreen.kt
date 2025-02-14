@@ -16,6 +16,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoWithTimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ThingToDoViewModelProvider
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ExistingThingToDoListItem
@@ -49,7 +50,7 @@ fun NavGraphBuilder.thingsToDoScreen(navController: NavController) {
 @Composable
 fun ThingsToDoScreen(
     uiState: ThingsToDoUiState,
-    onAddNewThingToDo: (ThingToDo, (ThingToDo) -> Unit) -> Unit,
+    onAddNewThingToDo: (ThingToDo, (ThingToDoWithTimeSpent) -> Unit) -> Unit,
     onStartSpendingTime: (ThingToDo) -> Unit,
     onStopSpendingTime: (TimeSpent) -> Unit,
     modifier: Modifier = Modifier,
@@ -66,7 +67,7 @@ fun ThingsToDoScreen(
     ThingsToDoListDetail(
         navigator.scaffoldDirective,
         navigator.scaffoldValue,
-        uiState.thingsToDo.map { ExistingThingToDoListItem(it.thingToDo, it.activeTimeSpent) },
+        uiState.thingsToDo.map { ExistingThingToDoListItem(it) },
         navigator.currentDestination?.content,
         onSelectItem = {
             coroutineScope.launch {
@@ -79,12 +80,12 @@ fun ThingsToDoScreen(
             }
         },
         onAddNewThingToDo = { thingToDo ->
-            val onComplete: (ThingToDo) -> Unit = { newThingToDo ->
+            val onComplete: (ThingToDoWithTimeSpent) -> Unit = { newThingToDo ->
                 coroutineScope.launch {
                     navigator.navigateBack(BackNavigationBehavior.PopLatest)
                     navigator.navigateTo(
                         ListDetailPaneScaffoldRole.Detail,
-                        ExistingThingToDoListItem(newThingToDo, null),
+                        ExistingThingToDoListItem(newThingToDo),
                     )
                 }
             }

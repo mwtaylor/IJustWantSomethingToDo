@@ -16,16 +16,13 @@ data class ThingToDoEntity(
     val name: String,
 )
 
-data class ThingToDoIncludingActiveTimeSpentEntity(
+data class ThingToDoWithTimeSpentEntity(
     @Embedded
     val thingToDoEntity: ThingToDoEntity,
-    @Embedded
-    val activeTimeSpentEntity: TimeSpentEntity?
-)
-
-data class ThingToDoWithActiveTimeSpentEntity(
-    @Embedded
-    val thingToDoEntity: ThingToDoEntity,
-    @Embedded
-    val activeTimeSpentEntity: TimeSpentEntity
+    @Relation(
+        entity = TimeSpentEntity::class,
+        parentColumn = "thing_to_do_id",
+        entityColumn = "time_spent_thing_to_do_id",
+    )
+    val timeSpent: List<TimeSpentEntity>,
 )

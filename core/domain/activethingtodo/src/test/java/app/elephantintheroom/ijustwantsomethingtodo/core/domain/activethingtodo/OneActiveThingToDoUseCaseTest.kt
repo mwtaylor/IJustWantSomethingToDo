@@ -3,7 +3,7 @@ package app.elephantintheroom.ijustwantsomethingtodo.core.domain.activethingtodo
 import app.elephantintheroom.ijustwantsomethingtodo.core.domain.common.TransactionProvider
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
-import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoIncludingActiveTimeSpent
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoWithTimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.ThingToDoRepository
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.TimeSpentRepository
@@ -131,7 +131,7 @@ class FakeThingToDoRepository(
         TODO("Not yet implemented")
     }
 
-    override fun getAllThingsToDoIncludingActiveTimeSpent(): Flow<List<ThingToDoIncludingActiveTimeSpent>> {
+    override fun getAllThingsToDoWithTimeSpent(): Flow<List<ThingToDoWithTimeSpent>> {
         TODO("Not yet implemented")
     }
 

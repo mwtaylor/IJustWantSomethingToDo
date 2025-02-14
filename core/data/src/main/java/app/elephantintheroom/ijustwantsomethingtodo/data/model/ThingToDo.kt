@@ -9,18 +9,20 @@ data class ThingToDo(
     val name: String,
 ) : Parcelable
 
+interface ThingToDoWithTimeSpent : Parcelable {
+    val thingToDo: ThingToDo
+    val concludedTimeSpent: List<TimeSpent>
+}
+
 @Parcelize
-data class ThingToDoIncludingActiveTimeSpent(
-    val thingToDo: ThingToDo,
-    val activeTimeSpent: TimeSpent?,
-) : Parcelable
+data class InactiveThingToDo(
+    override val thingToDo: ThingToDo,
+    override val concludedTimeSpent: List<TimeSpent>,
+) : ThingToDoWithTimeSpent, Parcelable
 
 @Parcelize
 data class ActiveThingToDo(
-    val thingToDo: ThingToDo,
+    override val thingToDo: ThingToDo,
     val activeTimeSpent: TimeSpent,
-) : Parcelable {
-    fun toOptionalActiveTimeSpent(): ThingToDoIncludingActiveTimeSpent {
-        return ThingToDoIncludingActiveTimeSpent(thingToDo, activeTimeSpent)
-    }
-}
+    override val concludedTimeSpent: List<TimeSpent>,
+) : ThingToDoWithTimeSpent, Parcelable

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.elephantintheroom.ijustwantsomethingtodo.core.domain.activethingtodo.OneActiveThingToDoUseCase
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
-import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoIncludingActiveTimeSpent
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoWithTimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.ThingToDoRepository
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.TimeSpentRepository
@@ -22,7 +22,7 @@ class ThingsToDoViewModel(
     private val oneActiveThingToDoUseCase: OneActiveThingToDoUseCase,
     private val clock: Clock,
 ) : ViewModel() {
-    val uiState: StateFlow<ThingsToDoUiState> = thingToDoRepository.getAllThingsToDoIncludingActiveTimeSpent().map {
+    val uiState: StateFlow<ThingsToDoUiState> = thingToDoRepository.getAllThingsToDoWithTimeSpent().map {
         ThingsToDoUiState(it)
     }.stateIn(
         viewModelScope,
@@ -30,7 +30,7 @@ class ThingsToDoViewModel(
         ThingsToDoUiState(emptyList())
     )
 
-    fun addThingToDo(thingToDo: ThingToDo, onComplete: (ThingToDo) -> Unit = {}) {
+    fun addThingToDo(thingToDo: ThingToDo, onComplete: (ThingToDoWithTimeSpent) -> Unit = {}) {
         viewModelScope.launch {
             val newThingToDo = thingToDoRepository.addThingToDo(thingToDo)
             onComplete(newThingToDo)
@@ -51,5 +51,5 @@ class ThingsToDoViewModel(
 }
 
 data class ThingsToDoUiState(
-    val thingsToDo: List<ThingToDoIncludingActiveTimeSpent>
+    val thingsToDo: List<ThingToDoWithTimeSpent>
 )

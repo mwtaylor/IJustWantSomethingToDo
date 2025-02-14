@@ -13,6 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.InactiveThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ExistingThingToDoListItem
@@ -49,9 +51,7 @@ fun ThingsToDoListPane(
                 for (thingToDoListItem in thingToDoListItems) {
                     ListItem(
                         headlineContent = {
-                            if (thingToDoListItem.activeTimeSpent?.let {
-                                it.ended == null
-                            } == true) {
+                            if (thingToDoListItem.thingToDoWithTimeSpent is ActiveThingToDo) {
                                 RunningThingToDoInList(
                                     thingToDoListItem,
                                     onStopSpendingTime,
@@ -86,7 +86,7 @@ fun ThingToDoInList(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         CompleteThingToDoButton(
-            thingToDoListItem.thingToDo,
+            thingToDoListItem.thingToDoWithTimeSpent.thingToDo,
             {},
         )
         Row(
@@ -94,7 +94,7 @@ fun ThingToDoInList(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(text = thingToDoListItem.thingToDo.name)
+            Text(text = thingToDoListItem.thingToDoWithTimeSpent.thingToDo.name)
             iconButton()
         }
     }
@@ -111,7 +111,7 @@ fun PausedThingToDoInList(
         modifier,
     ) {
         StartThingToDoButton(
-            thingToDoListItem.thingToDo,
+            thingToDoListItem.thingToDoWithTimeSpent.thingToDo,
             onClick = { onStartSpendingTime(thingToDoListItem) }
         )
     }
@@ -128,7 +128,7 @@ fun RunningThingToDoInList(
         modifier,
     ) {
         PauseThingToDoButton(
-            thingToDoListItem.thingToDo,
+            thingToDoListItem.thingToDoWithTimeSpent.thingToDo,
             onClick = { onStopSpendingTime(thingToDoListItem) },
         )
     }
@@ -144,16 +144,23 @@ fun ThingsToDoListPanePreview() {
     ThingsToDoListPane(
         thingToDoListItems = listOf(
             ExistingThingToDoListItem(
-                ThingToDo(1, "fix bugs"),
-                TimeSpent(1, 1, Instant.EPOCH, Instant.now()),
+                InactiveThingToDo(
+                    ThingToDo(1, "fix bugs"),
+                    listOf(TimeSpent(1, 1, Instant.EPOCH, Instant.now())),
+                ),
             ),
             ExistingThingToDoListItem(
-                ThingToDo(2, "submit code review"),
-                TimeSpent(2, 2, Instant.EPOCH, null),
+                ActiveThingToDo(
+                    ThingToDo(2, "submit code review"),
+                    TimeSpent(2, 2, Instant.EPOCH, null),
+                    emptyList(),
+                ),
             ),
             ExistingThingToDoListItem(
-                ThingToDo(3, "merge code"),
-                null,
+                InactiveThingToDo(
+                    ThingToDo(3, "merge code"),
+                    emptyList(),
+                ),
             ),
         ),
         {},

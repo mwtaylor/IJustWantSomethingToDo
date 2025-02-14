@@ -9,6 +9,8 @@ import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldValue
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.InactiveThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ExistingThingToDoListItem
@@ -40,9 +42,11 @@ fun ThingsToDoListDetail(
                     expandFloatingAddButton = scaffoldDirective.maxHorizontalPartitions > 1,
                     onItemClick = onSelectItem,
                     onNewThingToDoClick = onBeginNewThingToDo,
-                    onStartSpendingTime = { onStartSpendingTime(it.thingToDo) },
-                    onStopSpendingTime = { listItem ->
-                        listItem.activeTimeSpent?.let { onStopSpendingTime(it) }
+                    onStartSpendingTime = { onStartSpendingTime(it.thingToDoWithTimeSpent.thingToDo) },
+                    onStopSpendingTime = {
+                        if (it.thingToDoWithTimeSpent is ActiveThingToDo) {
+                            onStopSpendingTime(it.thingToDoWithTimeSpent.activeTimeSpent)
+                        }
                     },
                 )
             }
@@ -50,7 +54,7 @@ fun ThingsToDoListDetail(
         detailPane = {
             AnimatedPane {
                 when (content) {
-                    is ExistingThingToDoListItem -> ThingToDoDetailPane(content)
+                    is ExistingThingToDoListItem -> ThingToDoDetailPane(content.thingToDoWithTimeSpent)
                     is NewThingToDoListItem -> NewThingToDoPane(
                         save = onAddNewThingToDo,
                         cancel = onCancelNewThingToDo,
@@ -80,17 +84,23 @@ fun ThingToDoListDetailPreview() {
         ),
         listOf(
             ExistingThingToDoListItem(
-                ThingToDo(1, "fix bugs"),
-                null,
+                InactiveThingToDo(
+                    ThingToDo(1, "fix bugs"),
+                    emptyList(),
+                ),
             ),
             ExistingThingToDoListItem(
-                ThingToDo(2, "submit code review"),
-                null,
+                InactiveThingToDo(
+                    ThingToDo(2, "submit code review"),
+                    emptyList(),
+                ),
             ),
         ),
         ExistingThingToDoListItem(
-            ThingToDo(1, "fix bugs"),
-            null,
+            InactiveThingToDo(
+                ThingToDo(1, "fix bugs"),
+                emptyList()
+            ),
         ),
         {},
         {},
