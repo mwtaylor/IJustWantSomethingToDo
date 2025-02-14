@@ -8,11 +8,13 @@ import app.elephantintheroom.ijustwantsomethingtodo.data.repository.ThingToDoRep
 import app.elephantintheroom.ijustwantsomethingtodo.data.repository.TimeSpentRepository
 import java.time.Instant
 import kotlinx.coroutines.flow.first
+import java.time.Clock
 
 class OneActiveThingToDoUseCase(
     private val thingToDoRepository: ThingToDoRepository,
     private val timeSpentRepository: TimeSpentRepository,
     private val transactionProvider: TransactionProvider,
+    private val clock: Clock,
 ) {
     suspend fun startThingToDo(
         thingToDo: ThingToDo,
@@ -31,7 +33,7 @@ class OneActiveThingToDoUseCase(
                     TimeSpent(
                         null,
                         thingToDo.id!!,
-                        Instant.now(),
+                        Instant.now(clock),
                         null
                     )
                 )
