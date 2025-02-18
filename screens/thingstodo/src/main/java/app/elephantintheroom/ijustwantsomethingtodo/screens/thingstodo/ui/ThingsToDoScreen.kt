@@ -6,6 +6,7 @@ import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.BackNavigationBehavior
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -23,6 +24,7 @@ import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.Exi
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.NewThingToDoListItem
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ThingToDoListItem
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.navigation.ThingsToDoRoute
+import app.elephantintheroom.ijustwantsomethingtodo.ui.common.LocalClock
 import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.thingsToDoScreen(navController: NavController) {
@@ -37,12 +39,14 @@ fun NavGraphBuilder.thingsToDoScreen(navController: NavController) {
         )
         val uiState: ThingsToDoUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-        ThingsToDoScreen(
-            uiState,
-            viewModel::addThingToDo,
-            viewModel::startSpendingTime,
-            viewModel::stopSpendingTime,
-        )
+        CompositionLocalProvider(LocalClock provides viewModel.clock) {
+            ThingsToDoScreen(
+                uiState,
+                viewModel::addThingToDo,
+                viewModel::startSpendingTime,
+                viewModel::stopSpendingTime,
+            )
+        }
     }
 }
 

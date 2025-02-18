@@ -4,12 +4,9 @@ plugins {
 }
 
 android {
-    namespace = "app.elephantintheroom.ijustwantsomethingtodo.ui.thingtodo"
+    namespace = "app.elephantintheroom.ijustwantsomethingtodo.ui.common"
 }
 
 dependencies {
-    implementation(projects.core.data)
-    implementation(projects.ui.common)
     implementation(projects.core.time)
-    implementation(libs.material.icons.extended)
 }

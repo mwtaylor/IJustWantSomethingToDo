@@ -54,7 +54,11 @@ fun ThingsToDoListDetail(
         detailPane = {
             AnimatedPane {
                 when (content) {
-                    is ExistingThingToDoListItem -> ThingToDoDetailPane(content.thingToDoWithTimeSpent)
+                    is ExistingThingToDoListItem -> ThingToDoDetailPane(
+                        content.thingToDoWithTimeSpent,
+                        { onStartSpendingTime(content.thingToDoWithTimeSpent.thingToDo) },
+                        onStopSpendingTime,
+                    )
                     is NewThingToDoListItem -> NewThingToDoPane(
                         save = onAddNewThingToDo,
                         cancel = onCancelNewThingToDo,

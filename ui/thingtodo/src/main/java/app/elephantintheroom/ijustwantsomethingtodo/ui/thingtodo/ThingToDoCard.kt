@@ -11,10 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import app.elephantintheroom.ijustwantsomethingtodo.core.time.atStartOfDay
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoWithTimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
+import app.elephantintheroom.ijustwantsomethingtodo.ui.common.LocalClock
+import app.elephantintheroom.ijustwantsomethingtodo.ui.common.UpdatingDuration
 import java.time.Instant
 
 @Composable
@@ -57,6 +60,22 @@ fun ThingToDoCard(
                 )
             }
         }
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
+                .fillMaxWidth(),
+        ) {
+            UpdatingDuration(thingToDoWithTimeSpent::totalConcludedDuration)
+            if (thingToDoWithTimeSpent is ActiveThingToDo) {
+                val clock = LocalClock.current
+                UpdatingDuration {
+                    val now = Instant.now(clock)
+                    thingToDoWithTimeSpent.activeDuration(now)
+                }
+            }
+        }
     }
 }
 
@@ -74,10 +93,17 @@ fun ThingToDoCardPreview() {
             TimeSpent(
                 id = 1,
                 thingToDoId = 1,
-                started = Instant.EPOCH,
+                started = Instant.now().atStartOfDay(),
                 ended = null,
             ),
-            emptyList(),
+            listOf(
+                TimeSpent(
+                    id = 2,
+                    thingToDoId = 1,
+                    started = Instant.EPOCH,
+                    ended = Instant.ofEpochSecond(400),
+                )
+            ),
         ),
         {},
         {},

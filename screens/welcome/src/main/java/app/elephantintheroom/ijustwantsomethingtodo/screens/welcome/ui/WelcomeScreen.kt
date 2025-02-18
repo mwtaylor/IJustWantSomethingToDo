@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -16,6 +17,7 @@ import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.WelcomeViewModelProvider
 import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.navigation.WelcomeRoute
+import app.elephantintheroom.ijustwantsomethingtodo.ui.common.LocalClock
 
 fun NavGraphBuilder.welcomeScreen(
     navController: NavController,
@@ -32,13 +34,15 @@ fun NavGraphBuilder.welcomeScreen(
         )
         val uiState: WelcomeUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-        WelcomeScreen(
-            uiState,
-            activeThingToDo,
-            onThingToDoComplete = viewModel::completeThingToDo,
-            onThingToDoStart = viewModel::startThingToDo,
-            onThingToDoPause = viewModel::pauseThingToDo,
-        )
+        CompositionLocalProvider(LocalClock provides viewModel.clock) {
+            WelcomeScreen(
+                uiState,
+                activeThingToDo,
+                onThingToDoComplete = viewModel::completeThingToDo,
+                onThingToDoStart = viewModel::startThingToDo,
+                onThingToDoPause = viewModel::pauseThingToDo,
+            )
+        }
     }
 }
 

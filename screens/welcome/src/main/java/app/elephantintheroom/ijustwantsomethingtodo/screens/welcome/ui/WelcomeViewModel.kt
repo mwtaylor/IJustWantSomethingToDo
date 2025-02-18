@@ -18,7 +18,7 @@ import java.time.Instant
 class WelcomeViewModel(
     private val timeSpentRepository: TimeSpentRepository,
     private val oneActiveThingToDoUseCase: OneActiveThingToDoUseCase,
-    private val clock: Clock,
+    val clock: Clock,
 ) : ViewModel() {
     val uiState: StateFlow<WelcomeUiState> = emptyList<WelcomeUiState>().asFlow().stateIn(
         viewModelScope,

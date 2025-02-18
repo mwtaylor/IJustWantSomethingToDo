@@ -12,5 +12,7 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.domain.activethingtodo)
     implementation(projects.ui.thingtodo)
+    implementation(projects.ui.common)
+    implementation(projects.core.time)
     implementation(libs.androidx.adaptive.navigation.android)
 }

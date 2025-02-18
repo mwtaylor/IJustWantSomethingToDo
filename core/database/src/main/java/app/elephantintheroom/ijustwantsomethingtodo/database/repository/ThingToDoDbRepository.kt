@@ -49,17 +49,17 @@ fun ThingToDoEntity.toModel(): ThingToDo {
 
 fun ThingToDoWithTimeSpentEntity.toModel(): ThingToDoWithTimeSpent {
     val timeSpentModels = timeSpent.map { it.toModel() }
-    val activeTimeSpent = timeSpentModels.firstOrNull { it.ended == null }
-    return if (activeTimeSpent == null) {
+    val (activeTimeSpent, concludedTimeSpent) = timeSpentModels.partition { it.ended == null }
+    return if (activeTimeSpent.isEmpty()) {
         InactiveThingToDo(
             thingToDoEntity.toModel(),
-            timeSpentModels,
+            concludedTimeSpent,
         )
     } else {
         ActiveThingToDo(
             thingToDoEntity.toModel(),
-            activeTimeSpent,
-            timeSpentModels,
+            activeTimeSpent.single(),
+            concludedTimeSpent,
         )
     }
 }

@@ -20,7 +20,7 @@ class ThingsToDoViewModel(
     private val thingToDoRepository: ThingToDoRepository,
     private val timeSpentRepository: TimeSpentRepository,
     private val oneActiveThingToDoUseCase: OneActiveThingToDoUseCase,
-    private val clock: Clock,
+    val clock: Clock,
 ) : ViewModel() {
     val uiState: StateFlow<ThingsToDoUiState> = thingToDoRepository.getAllThingsToDoWithTimeSpent().map {
         ThingsToDoUiState(it)
