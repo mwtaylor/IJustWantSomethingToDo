@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.elephantintheroom.ijustwantsomethingtodo.core.time.atStartOfDay
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
-import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ExistingThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoWithTimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.ui.common.LocalClock
@@ -86,7 +86,7 @@ fun ThingToDoCard(
 fun ThingToDoCardPreview() {
     ThingToDoCard(
         ActiveThingToDo(
-            ThingToDo(
+            ExistingThingToDo(
                 id = 1,
                 name = "fix bugs",
             ),

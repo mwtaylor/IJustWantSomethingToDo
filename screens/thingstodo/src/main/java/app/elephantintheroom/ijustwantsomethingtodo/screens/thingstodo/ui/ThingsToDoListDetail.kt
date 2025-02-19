@@ -7,12 +7,21 @@ import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
 import androidx.compose.material3.adaptive.layout.PaneScaffoldDirective
 import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldValue
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.HasDefaultViewModelProviderFactory
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.MutableCreationExtras
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ExistingThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.InactiveThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
+import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.ThingToDoViewModelProvider
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ExistingThingToDoListItem
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.NewThingToDoListItem
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ThingToDoListItem
@@ -54,11 +63,32 @@ fun ThingsToDoListDetail(
         detailPane = {
             AnimatedPane {
                 when (content) {
-                    is ExistingThingToDoListItem -> ThingToDoDetailPane(
-                        content.thingToDoWithTimeSpent,
-                        { onStartSpendingTime(content.thingToDoWithTimeSpent.thingToDo) },
-                        onStopSpendingTime,
-                    )
+                    is ExistingThingToDoListItem -> {
+                        val viewModelStoreOwner = LocalViewModelStoreOwner.current
+                        val defaultExtras =
+                            if (viewModelStoreOwner is HasDefaultViewModelProviderFactory) {
+                                viewModelStoreOwner.defaultViewModelCreationExtras
+                            } else {
+                                CreationExtras.Empty
+                            }
+                        val viewModel: ThingToDoViewModel = viewModel(
+                            key = "ThingToDo${content.thingToDoWithTimeSpent.thingToDo.id}",
+                            factory = ThingToDoViewModelProvider.factory,
+                            extras = MutableCreationExtras(defaultExtras).apply {
+                                set(
+                                    ThingToDoViewModelProvider.THING_TO_DO_KEY,
+                                    content.thingToDoWithTimeSpent,
+                                )
+                            },
+                        )
+                        val uiState: ThingToDoUiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+                        ThingToDoDetailPane(
+                            uiState.thingToDo,
+                            viewModel::startSpendingTime,
+                            viewModel::stopSpendingTime,
+                        )
+                    }
                     is NewThingToDoListItem -> NewThingToDoPane(
                         save = onAddNewThingToDo,
                         cancel = onCancelNewThingToDo,
@@ -89,20 +119,20 @@ fun ThingToDoListDetailPreview() {
         listOf(
             ExistingThingToDoListItem(
                 InactiveThingToDo(
-                    ThingToDo(1, "fix bugs"),
+                    ExistingThingToDo(1, "fix bugs"),
                     emptyList(),
                 ),
             ),
             ExistingThingToDoListItem(
                 InactiveThingToDo(
-                    ThingToDo(2, "submit code review"),
+                    ExistingThingToDo(2, "submit code review"),
                     emptyList(),
                 ),
             ),
         ),
         ExistingThingToDoListItem(
             InactiveThingToDo(
-                ThingToDo(1, "fix bugs"),
+                ExistingThingToDo(1, "fix bugs"),
                 emptyList()
             ),
         ),

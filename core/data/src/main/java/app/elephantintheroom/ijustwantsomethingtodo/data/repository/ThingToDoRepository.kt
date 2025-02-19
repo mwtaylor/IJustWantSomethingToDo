@@ -6,7 +6,7 @@ import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
 import kotlinx.coroutines.flow.Flow
 
 interface ThingToDoRepository {
-    fun getAllThingsToDo(): Flow<List<ThingToDo>>
+    fun getWithTimeSpent(id: Long): Flow<ThingToDoWithTimeSpent>
 
     fun getAllThingsToDoWithTimeSpent(): Flow<List<ThingToDoWithTimeSpent>>
 

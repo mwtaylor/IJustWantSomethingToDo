@@ -17,7 +17,7 @@ internal class ThingToDoDaoTest : DatabaseTestBase() {
             ThingToDoEntity(name = "first thing to do"),
         )
 
-        val thingToDoEntity = thingToDoDao.get(1L)
+        val thingToDoEntity = thingToDoDao.getWithTimeSpent(1L).first().thingToDoEntity
         assertEquals(
             1L,
             thingToDoEntity.id,
@@ -32,7 +32,7 @@ internal class ThingToDoDaoTest : DatabaseTestBase() {
             ThingToDoEntity(name = "third thing to do"),
         ))
 
-        val secondThingToDoEntity = thingToDoDao.get(2L)
+        val secondThingToDoEntity = thingToDoDao.getWithTimeSpent(2L).first().thingToDoEntity
         assertEquals(
             2L,
             secondThingToDoEntity.id,
@@ -42,7 +42,7 @@ internal class ThingToDoDaoTest : DatabaseTestBase() {
             "second",
         )
 
-        val thirdThingToDoEntity = thingToDoDao.get(3L)
+        val thirdThingToDoEntity = thingToDoDao.getWithTimeSpent(3L).first().thingToDoEntity
         assertEquals(
             3L,
             thirdThingToDoEntity.id,
@@ -69,7 +69,7 @@ internal class ThingToDoDaoTest : DatabaseTestBase() {
     }
 
     @Test
-    fun testGetAllIncludingActiveTimeSpent() = runTest {
+    fun testGetAllWithTimeSpent() = runTest {
         thingToDoDao.insert(listOf(
             ThingToDoEntity(name = "first thing to do"),
             ThingToDoEntity(name = "second thing to do"),
@@ -81,42 +81,33 @@ internal class ThingToDoDaoTest : DatabaseTestBase() {
         timeSpentDao.upsert(
             TimeSpentEntity(thingToDoId = 3, started = Instant.EPOCH, ended = Instant.now())
         )
+        timeSpentDao.upsert(
+            TimeSpentEntity(thingToDoId = 3, started = Instant.EPOCH, ended = Instant.now())
+        )
 
-        val thingToDoIncludingActiveTimeSpentEntities = thingToDoDao.getAllIncludingActiveTimeSpent().first()
+        val thingToDoWithTimeSpentEntities = thingToDoDao.getAllWithTimeSpent().first()
 
         assertEquals(
             listOf(1L, 2L, 3L),
-            thingToDoIncludingActiveTimeSpentEntities.map { it.thingToDoEntity.id },
+            thingToDoWithTimeSpentEntities.map { it.thingToDoEntity.id },
+        )
+        assertEquals(
+            emptyList(),
+            thingToDoWithTimeSpentEntities[0].timeSpent.map { timeSpent -> timeSpent.id },
+        )
+        assertEquals(
+            listOf(1L),
+            thingToDoWithTimeSpentEntities[1].timeSpent.map { timeSpent -> timeSpent.id },
+        )
+        assertEquals(
+            listOf(2L, 3L),
+            thingToDoWithTimeSpentEntities[2].timeSpent.map { timeSpent -> timeSpent.id },
         )
         assertEquals(
             listOf(null, 1L, null),
-            thingToDoIncludingActiveTimeSpentEntities.map { it.activeTimeSpentEntity?.id },
-        )
-    }
-
-    @Test
-    fun testGetAllWithActiveTimeSpent() = runTest {
-        thingToDoDao.insert(listOf(
-            ThingToDoEntity(name = "first thing to do"),
-            ThingToDoEntity(name = "second thing to do"),
-            ThingToDoEntity(name = "third thing to do"),
-        ))
-
-        assertEquals(
-            emptyList(),
-            thingToDoDao.getAllWithActiveTimeSpent().first().map { it.thingToDoEntity.id },
-        )
-
-        timeSpentDao.upsert(
-            TimeSpentEntity(thingToDoId = 2, started = Instant.EPOCH)
-        )
-        timeSpentDao.upsert(
-            TimeSpentEntity(thingToDoId = 3, started = Instant.EPOCH, ended = Instant.now())
-        )
-
-        assertEquals(
-            listOf(2L),
-            thingToDoDao.getAllWithActiveTimeSpent().first().map { it.thingToDoEntity.id },
+            thingToDoWithTimeSpentEntities.map {
+                it.timeSpent.singleOrNull { timeSpent -> timeSpent.ended == null }?.id
+            },
         )
     }
 }

@@ -2,6 +2,7 @@ package app.elephantintheroom.ijustwantsomethingtodo.core.domain.activethingtodo
 
 import app.elephantintheroom.ijustwantsomethingtodo.core.domain.common.TransactionProvider
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ExistingThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoWithTimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
@@ -122,12 +123,12 @@ class FakeTransactionProvider : TransactionProvider {
 class FakeThingToDoRepository(
     private val timeSpentRepository: FakeTimeSpentRepository
 ) : ThingToDoRepository {
-    val thingsToDo: List<ThingToDo> = listOf(
-        ThingToDo(1, ""),
-        ThingToDo(2, ""),
+    val thingsToDo: List<ExistingThingToDo> = listOf(
+        ExistingThingToDo(1, ""),
+        ExistingThingToDo(2, ""),
     )
 
-    override fun getAllThingsToDo(): Flow<List<ThingToDo>> {
+    override fun getWithTimeSpent(id: Long): Flow<ThingToDoWithTimeSpent> {
         TODO("Not yet implemented")
     }
 
@@ -140,10 +141,10 @@ class FakeThingToDoRepository(
             val activeTimeSpent = timeSpentRepository.allRecordedTimeSpent.firstOrNull {
                 it.thingToDoId == thingToDo.id
             }
-            activeTimeSpent?.let { ActiveThingToDo(thingToDo, activeTimeSpent) }
+            activeTimeSpent?.let { ActiveThingToDo(thingToDo, activeTimeSpent, emptyList()) }
         }).asFlow()
 
-    override suspend fun addThingToDo(thingToDo: ThingToDo): ThingToDo {
+    override suspend fun addThingToDo(thingToDo: ThingToDo): ThingToDoWithTimeSpent {
         TODO("Not yet implemented")
     }
 }

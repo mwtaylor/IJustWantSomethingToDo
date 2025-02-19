@@ -8,6 +8,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ExistingThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.screens.welcome.R
 import app.elephantintheroom.ijustwantsomethingtodo.ui.thingtodo.ThingToDoCard
@@ -43,7 +44,7 @@ fun WelcomeContent(
 fun WelcomeContentPreview() {
     WelcomeContent(
         ActiveThingToDo(
-            ThingToDo(id = 1, "fix bugs"),
+            ExistingThingToDo(id = 1, "fix bugs"),
             TimeSpent(id = 1, thingToDoId = 1, Instant.EPOCH, null),
             emptyList(),
         ),

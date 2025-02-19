@@ -26,7 +26,7 @@ interface ThingToDoDao {
         FROM things_to_do
         WHERE thing_to_do_id = :id
     """)
-    suspend fun get(id: Long): ThingToDoWithTimeSpentEntity
+    fun getWithTimeSpent(id: Long): Flow<ThingToDoWithTimeSpentEntity>
 
     @Insert
     suspend fun insert(thingToDoEntity: ThingToDoEntity): Long

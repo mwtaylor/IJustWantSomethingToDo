@@ -5,14 +5,25 @@ import kotlinx.parcelize.Parcelize
 import java.time.Duration
 import java.time.Instant
 
+interface ThingToDo : Parcelable {
+    val id: Long?
+    val name: String
+}
+
 @Parcelize
-data class ThingToDo(
-    val id: Long?,
-    val name: String,
-) : Parcelable
+data class ExistingThingToDo(
+    override val id: Long,
+    override val name: String,
+) : ThingToDo, Parcelable
+
+@Parcelize
+data class NewThingToDo(
+    override val id: Long? = null,
+    override val name: String,
+) : ThingToDo, Parcelable
 
 interface ThingToDoWithTimeSpent : Parcelable {
-    val thingToDo: ThingToDo
+    val thingToDo: ExistingThingToDo
     val concludedTimeSpent: List<TimeSpent>
 
     fun totalConcludedDuration(): Duration {
@@ -24,13 +35,13 @@ interface ThingToDoWithTimeSpent : Parcelable {
 
 @Parcelize
 data class InactiveThingToDo(
-    override val thingToDo: ThingToDo,
+    override val thingToDo: ExistingThingToDo,
     override val concludedTimeSpent: List<TimeSpent>,
 ) : ThingToDoWithTimeSpent, Parcelable
 
 @Parcelize
 data class ActiveThingToDo(
-    override val thingToDo: ThingToDo,
+    override val thingToDo: ExistingThingToDo,
     val activeTimeSpent: TimeSpent,
     override val concludedTimeSpent: List<TimeSpent>,
 ) : ThingToDoWithTimeSpent, Parcelable {

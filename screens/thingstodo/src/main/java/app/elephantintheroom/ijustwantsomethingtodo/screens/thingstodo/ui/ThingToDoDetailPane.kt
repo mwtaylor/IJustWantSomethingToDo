@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import app.elephantintheroom.ijustwantsomethingtodo.core.time.atStartOfDay
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ExistingThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.InactiveThingToDo
-import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDoWithTimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.ui.common.LocalClock
@@ -103,7 +103,7 @@ fun TotalTimeSpent(
 fun ThingToDoDetailPanePreview() {
     ThingToDoDetailPane(
         InactiveThingToDo(
-            ThingToDo(1, "fix bugs"),
+            ExistingThingToDo(1, "fix bugs"),
             emptyList(),
         ),
         {},
@@ -119,7 +119,7 @@ fun ThingToDoDetailPanePreview() {
 fun ActiveThingToDoDetailPanePreview() {
     ThingToDoDetailPane(
         ActiveThingToDo(
-            ThingToDo(1, "fix bugs"),
+            ExistingThingToDo(1, "fix bugs"),
             TimeSpent(1, 1, Instant.now().atStartOfDay(), null),
             emptyList(),
         ),

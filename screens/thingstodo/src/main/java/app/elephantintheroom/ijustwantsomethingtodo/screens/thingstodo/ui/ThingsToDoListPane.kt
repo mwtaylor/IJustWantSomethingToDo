@@ -14,8 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.ActiveThingToDo
+import app.elephantintheroom.ijustwantsomethingtodo.data.model.ExistingThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.InactiveThingToDo
-import app.elephantintheroom.ijustwantsomethingtodo.data.model.ThingToDo
 import app.elephantintheroom.ijustwantsomethingtodo.data.model.TimeSpent
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ExistingThingToDoListItem
 import app.elephantintheroom.ijustwantsomethingtodo.screens.thingstodo.model.ThingToDoListItem
@@ -145,20 +145,20 @@ fun ThingsToDoListPanePreview() {
         thingToDoListItems = listOf(
             ExistingThingToDoListItem(
                 InactiveThingToDo(
-                    ThingToDo(1, "fix bugs"),
+                    ExistingThingToDo(1, "fix bugs"),
                     listOf(TimeSpent(1, 1, Instant.EPOCH, Instant.now())),
                 ),
             ),
             ExistingThingToDoListItem(
                 ActiveThingToDo(
-                    ThingToDo(2, "submit code review"),
+                    ExistingThingToDo(2, "submit code review"),
                     TimeSpent(2, 2, Instant.EPOCH, null),
                     emptyList(),
                 ),
             ),
             ExistingThingToDoListItem(
                 InactiveThingToDo(
-                    ThingToDo(3, "merge code"),
+                    ExistingThingToDo(3, "merge code"),
                     emptyList(),
                 ),
             ),
